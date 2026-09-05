@@ -25,6 +25,9 @@ window and legitimately restarts from a low number.
 - `resets_at` is epoch seconds in the payload. [S2:F2]
 - The statusline fires several times per turn, so the merge must stay a
   single small read plus one atomic write. [S2:F5]
+- Concurrent invocations interleave their read-merge-write, so the cycle
+  runs under an `flock(2)` on a sibling lock file; without it two writers
+  in the same second can drop the higher value. [S2:F3]
 
 ## Alternatives considered
 - Last writer wins: rejected, produces visible flicker between sessions.
