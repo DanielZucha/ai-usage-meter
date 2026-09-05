@@ -48,3 +48,8 @@
 - source: six-agent audit verdicts (session), commits c822f0b and b7cc5be
 - pages touched: decisions/2026-09-05_pr-1_audit.md (new), synthesis/gaps_and_leads.md, index.md (Now block, catalog), WIKI_SCHEMA.md
 - notes: all six approve; HIGH freshness bug fixed; 72 tests
+
+## [2026-09-05] ingest | Release v0.1.0
+- source: PR #1 (devel, merge 27bc05d), PR #2 (main, merge 3d3c9e6), tag v0.1.0
+- pages touched: index.md (Now block)
+- notes: first release; no code change since the audit
