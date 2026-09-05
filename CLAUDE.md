@@ -22,10 +22,15 @@ provider-keyed so a second provider is an additive change, not a rewrite.
 
 - Data path: Claude Code statusline hook -> snapshot JSON on disk -> menu-bar
   app. The hook is the only writer; the app is read-only.
+- Package: `Sources/MeterCore` holds every rule and is the only tested
+  target; `Sources/MeterHook` and `Sources/AIUsageMeter` are thin shells.
+  Build with `swift build`, test with `make test` (never bare `swift test`
+  on this Mac, see the runbook), ship with `make install`.
 - Language: Swift, SwiftPM only (Command Line Tools, no Xcode on this Mac).
 - Decisions: `knowledge/decisions/` (one page per non-obvious choice).
 - Data sources and their sharp edges: `docs/2026-09-05_usage-data-sources.md`
-  and `knowledge/entities/integrations/`.
+  and `docs/2026-09-05_statusline-probe.md`.
+- Install and wiring steps: `knowledge/entities/runbooks/install_and_wire.md`.
 
 ## Session rules
 
