@@ -17,7 +17,8 @@ import Testing
 
     @Test func normalStateIsPlain() {
         let display = MeterDisplay.make(snapshot: snapshot(five: 42, seven: 18), now: now)
-        #expect(display.barText == "42% · 18%")
+        #expect(display.fiveHour.percentText == "42%")
+        #expect(display.sevenDay.percentText == "18%")
         #expect(display.fiveHour.isBold == false)
         #expect(display.sevenDay.isBold == false)
         #expect(display.isFlipped == false)
@@ -57,7 +58,8 @@ import Testing
 
     @Test func absentWindowShowsDashes() {
         let display = MeterDisplay.make(snapshot: snapshot(five: 42, seven: nil), now: now)
-        #expect(display.barText == "42% · --")
+        #expect(display.fiveHour.percentText == "42%")
+        #expect(display.sevenDay.percentText == "--")
         #expect(display.sevenDay.percent == nil)
         #expect(display.sevenDay.fraction == 0)
         #expect(display.sevenDay.rowText == "7-day  --")
@@ -71,8 +73,14 @@ import Testing
 
     @Test func noSnapshotShowsDashesAndNoAge() {
         let display = MeterDisplay.make(snapshot: nil, now: now)
-        #expect(display.barText == "-- · --")
+        #expect(display.fiveHour.percentText == "--")
+        #expect(display.sevenDay.percentText == "--")
         #expect(display.isFlipped == false)
         #expect(display.ageText == "No snapshot yet")
+    }
+
+    @Test func separatorIsTheSingleSourceOfTruth() {
+        #expect(MeterDisplay.separator == " · ")
+        #expect(StatuslineLine.separator == MeterDisplay.separator)
     }
 }

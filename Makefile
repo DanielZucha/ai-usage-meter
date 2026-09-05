@@ -36,9 +36,11 @@ bundle: build
 
 install: bundle
 	mkdir -p "$(HOME)/.local/bin" "$(HOME)/Applications"
-	cp "$(BUILD_DIR)/ai-usage-meter-hook" "$(HOOK_DEST)"
-	chmod 755 "$(HOOK_DEST)"
+	cp "$(BUILD_DIR)/ai-usage-meter-hook" "$(HOOK_DEST).new"
+	chmod 755 "$(HOOK_DEST).new"
+	mv -f "$(HOOK_DEST).new" "$(HOOK_DEST)"
 	-osascript -e 'tell application "AI Usage Meter" to quit' >/dev/null 2>&1
+	@for i in 1 2 3 4 5 6; do pgrep -x "AIUsageMeter" >/dev/null 2>&1 || break; sleep 0.5; done
 	rm -rf "$(APP_DEST)"
 	cp -R "$(APP)" "$(APP_DEST)"
 	open "$(APP_DEST)"

@@ -17,13 +17,15 @@ public struct MeterDisplay: Equatable, Sendable {
     public static let flipThreshold = 90
     public static let unknown = "--"
     public static let noSnapshotText = "No snapshot yet"
+    /// The one separator used between adjacent fields across every rendered
+    /// surface (terminal line, menu-bar label), so it is typed once.
+    public static let separator = " · "
 
     public var fiveHour: WindowDisplay
     public var sevenDay: WindowDisplay
     /// True when either window is at `flipThreshold` or more: the label
     /// inverts (white background, black glyph and text).
     public var isFlipped: Bool
-    public var barText: String
     public var ageText: String
 
     public static func make(snapshot: Snapshot?, now: Date) -> MeterDisplay {
@@ -37,7 +39,6 @@ public struct MeterDisplay: Equatable, Sendable {
             fiveHour: fiveHour,
             sevenDay: sevenDay,
             isFlipped: flipped,
-            barText: "\(fiveHour.percentText) · \(sevenDay.percentText)",
             ageText: age
         )
     }

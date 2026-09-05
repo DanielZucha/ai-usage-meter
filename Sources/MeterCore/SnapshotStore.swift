@@ -19,6 +19,10 @@ public struct SnapshotStore: Sendable {
         self.fileURL = fileURL
     }
 
+    private var directory: URL {
+        fileURL.deletingLastPathComponent()
+    }
+
     public static func defaultURL(fileManager: FileManager = .default) -> URL {
         let base = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first
             ?? fileManager.homeDirectoryForCurrentUser.appendingPathComponent("Library/Application Support")
@@ -37,9 +41,10 @@ public struct SnapshotStore: Sendable {
 
     public func write(_ snapshot: Snapshot) throws {
         let data = try SnapshotCoding.encode(snapshot)
-        let directory = fileURL.deletingLastPathComponent()
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
-        let temporary = directory.appendingPathComponent(".\(Self.fileName).\(ProcessInfo.processInfo.processIdentifier).tmp")
+        let temporary = directory.appendingPathComponent(
+            ".\(Self.fileName).\(ProcessInfo.processInfo.processIdentifier).\(UUID().uuidString).tmp"
+        )
         try data.write(to: temporary)
         guard rename(temporary.path, fileURL.path) == 0 else {
             let code = errno
@@ -61,7 +66,6 @@ public struct SnapshotStore: Sendable {
     /// `rename(2)`, and the merge this guards is monotone, so a lost
     /// update is repaired by the next hook invocation.
     public func withExclusiveLock<T>(_ body: () throws -> T) throws -> T {
-        let directory = fileURL.deletingLastPathComponent()
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
         let lockPath = directory.appendingPathComponent(Self.lockFileName).path
         let descriptor = open(lockPath, O_CREAT | O_RDWR | O_CLOEXEC, 0o644)

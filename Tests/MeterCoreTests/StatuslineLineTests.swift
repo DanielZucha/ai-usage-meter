@@ -8,11 +8,6 @@ import Testing
         #expect(StatuslineLine.render(payload) == "Fable 5.1 · high · ⛁ 12%")
     }
 
-    @Test func rendersDashesForMissingWindows() throws {
-        let payload = try StatuslinePayload.decode(Fixtures.noRateLimitsJSON)
-        #expect(StatuslineLine.render(payload) == "Fable 5.1 · ⛁ 3%")
-    }
-
     @Test func omitsEffortWhenAbsent() throws {
         let payload = try StatuslinePayload.decode(Fixtures.noRateLimitsJSON)
         #expect(StatuslineLine.render(payload) == "Fable 5.1 · ⛁ 3%")
@@ -41,5 +36,20 @@ import Testing
         let json = Data(#"{"context_window":{"used_percentage":1e300}}"#.utf8)
         let payload = try StatuslinePayload.decode(json)
         #expect(StatuslineLine.render(payload) == "Claude · ⛁ 1000%")
+    }
+
+    @Test func emptyDisplayNameFallsBackInsteadOfALeadingBlankSegment() throws {
+        let json = Data(#"{"model":{"display_name":""},"context_window":{"used_percentage":5}}"#.utf8)
+        let payload = try StatuslinePayload.decode(json)
+        #expect(StatuslineLine.render(payload) == "Claude · ⛁ 5%")
+    }
+
+    @Test func newlinesInModelOrEffortAreFlattenedToSpaces() throws {
+        let json = Data(#"{"model":{"display_name":"Fable\n5.1"},"effort":{"level":"hi\rgh"}}"#.utf8)
+        let payload = try StatuslinePayload.decode(json)
+        let line = StatuslineLine.render(payload)
+        #expect(!line.contains("\n"))
+        #expect(!line.contains("\r"))
+        #expect(line == "Fable 5.1 · hi gh · ⛁ --")
     }
 }

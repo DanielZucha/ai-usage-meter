@@ -15,7 +15,14 @@ enum LabelImage {
     static let flippedBackgroundAlpha: CGFloat = 0.5
 
     static let glyph: NSImage = {
-        let image = NSImage(data: Data(ClaudeGlyph.svg.utf8)) ?? NSImage(size: .zero)
+        let image: NSImage
+        if let decoded = NSImage(data: Data(ClaudeGlyph.svg.utf8)) {
+            image = decoded
+        } else {
+            NSLog("LabelImage: failed to decode the embedded glyph SVG; falling back to a system symbol")
+            image = NSImage(systemSymbolName: "questionmark.circle", accessibilityDescription: nil)
+                ?? NSImage(size: .zero)
+        }
         image.size = NSSize(width: glyphSize, height: glyphSize)
         return image
     }()
@@ -44,7 +51,7 @@ enum LabelImage {
     static func attributedText(_ display: MeterDisplay) -> NSAttributedString {
         let result = NSMutableAttributedString()
         result.append(number(display.fiveHour))
-        result.append(NSAttributedString(string: " · ", attributes: attributes(bold: false)))
+        result.append(NSAttributedString(string: MeterDisplay.separator, attributes: attributes(bold: false)))
         result.append(number(display.sevenDay))
         return result
     }
