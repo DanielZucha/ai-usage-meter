@@ -36,4 +36,10 @@ import Testing
     @Test func contextGlyphIsTheDraughtsKing() {
         #expect(StatuslineLine.contextGlyph == "\u{26C1}")
     }
+
+    @Test func hugeContextPercentageDoesNotCrash() throws {
+        let json = Data(#"{"context_window":{"used_percentage":1e300}}"#.utf8)
+        let payload = try StatuslinePayload.decode(json)
+        #expect(StatuslineLine.render(payload) == "Claude · ⛁ 1000%")
+    }
 }

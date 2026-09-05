@@ -18,7 +18,7 @@ public enum StatuslineLine {
     }
 
     static func percent(_ value: Double?) -> String {
-        guard let value else { return unknown }
-        return "\(max(0, Int(value.rounded())))%"
+        guard let value, let clamped = clampedInt(value) else { return unknown }
+        return "\(clamped)%"
     }
 }

@@ -49,6 +49,17 @@ public struct StatuslinePayload: Decodable, Sendable {
         case rateLimits = "rate_limits"
     }
 
+    /// Hand-written so one field's type change (upstream) cannot fail the
+    /// whole payload: each top-level key decodes independently, and a
+    /// throw on one leaves the rest intact instead of degrading the line.
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        model = try? container.decodeIfPresent(Model.self, forKey: .model)
+        effort = try? container.decodeIfPresent(Effort.self, forKey: .effort)
+        contextWindow = try? container.decodeIfPresent(ContextWindow.self, forKey: .contextWindow)
+        rateLimits = try? container.decodeIfPresent(RateLimits.self, forKey: .rateLimits)
+    }
+
     public static let source = "statusline"
 
     public static func decode(_ data: Data) throws -> StatuslinePayload {
@@ -67,9 +78,10 @@ public struct StatuslinePayload: Decodable, Sendable {
     }
 
     private static func window(from raw: RateWindow?) -> UsageWindow? {
-        guard let raw, let used = raw.usedPercentage, let reset = raw.resetsAt else { return nil }
+        guard let raw, let used = raw.usedPercentage, let reset = raw.resetsAt,
+              let percentage = clampedInt(used) else { return nil }
         return UsageWindow(
-            usedPercentage: max(0, Int(used.rounded())),
+            usedPercentage: percentage,
             resetsAt: Date(timeIntervalSince1970: reset)
         )
     }

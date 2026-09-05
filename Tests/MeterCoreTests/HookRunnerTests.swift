@@ -58,4 +58,27 @@ import Testing
         let line = HookRunner.run(input: Fixtures.samplePayloadJSON, store: store, now: Fixtures.captured)
         #expect(line == "Fable 5.1 · high · ⛁ 12%")
     }
+
+    @Test func hugeContextPercentageReturnsALineWithoutCrashing() {
+        let store = temporaryStore()
+        let line = HookRunner.run(
+            input: Data(#"{"context_window":{"used_percentage":1e300}}"#.utf8),
+            store: store,
+            now: Fixtures.captured
+        )
+        #expect(line == "Claude · ⛁ 1000%")
+    }
+
+    @Test func numericEffortLevelStillWritesTheSnapshot() throws {
+        let store = temporaryStore()
+        let input = Data("""
+        {"effort":{"level":3},
+         "rate_limits":{"five_hour":{"used_percentage":21,"resets_at":1788617400},
+                        "seven_day":{"used_percentage":4,"resets_at":1789160400}}}
+        """.utf8)
+        let line = HookRunner.run(input: input, store: store, now: Fixtures.captured)
+        #expect(line == "Claude · ⛁ --")
+        let snapshot = try #require(store.read())
+        #expect(snapshot.claude?.fiveHour == UsageWindow(usedPercentage: 21, resetsAt: Fixtures.fiveReset))
+    }
 }

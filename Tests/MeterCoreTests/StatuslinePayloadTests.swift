@@ -49,4 +49,23 @@ import Testing
         #expect(usage.fiveHour == nil)
         #expect(usage.sevenDay == nil)
     }
+
+    @Test func hugePercentageIsClampedNotTrapped() throws {
+        let json = Data("""
+        {"rate_limits":{"five_hour":{"used_percentage":1e300,"resets_at":1788617400}}}
+        """.utf8)
+        let payload = try StatuslinePayload.decode(json)
+        let usage = payload.providerUsage(capturedAt: Fixtures.captured)
+        #expect(usage?.fiveHour?.usedPercentage == 1_000)
+    }
+
+    @Test func numericEffortLevelDoesNotBlockRateLimitsDecoding() throws {
+        let json = Data("""
+        {"effort":{"level":3},
+         "rate_limits":{"five_hour":{"used_percentage":21,"resets_at":1788617400}}}
+        """.utf8)
+        let payload = try StatuslinePayload.decode(json)
+        #expect(payload.effort?.level == nil)
+        #expect(payload.rateLimits?.fiveHour?.usedPercentage == 21)
+    }
 }

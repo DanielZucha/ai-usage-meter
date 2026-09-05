@@ -32,4 +32,21 @@ import Testing
         #expect(Countdown.age(since: now.addingTimeInterval(-2 * 3600), now: now) == "2 h ago")
         #expect(Countdown.age(since: now.addingTimeInterval(-3 * 86_400), now: now) == "3 d ago")
     }
+
+    @Test func hugeResetDistanceDoesNotCrash() {
+        let farAway = Date(timeIntervalSince1970: 1e300)
+        let text = Countdown.text(until: farAway, from: now)
+        #expect(text != nil)
+    }
+
+    @Test func nonFiniteResetDistanceReturnsNilNotCrash() {
+        let text = Countdown.text(until: Date(timeIntervalSince1970: .infinity), from: now)
+        #expect(text == nil)
+    }
+
+    @Test func hugeAgeDoesNotCrash() {
+        let ancient = Date(timeIntervalSince1970: -1e300)
+        let text = Countdown.age(since: ancient, now: now)
+        #expect(!text.isEmpty)
+    }
 }
