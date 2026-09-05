@@ -47,6 +47,6 @@ import Testing
     @Test func hugeAgeDoesNotCrash() {
         let ancient = Date(timeIntervalSince1970: -1e300)
         let text = Countdown.age(since: ancient, now: now)
-        #expect(!text.isEmpty)
+        #expect(text == "11574074 d ago")
     }
 }
