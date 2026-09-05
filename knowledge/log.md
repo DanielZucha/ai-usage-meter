@@ -30,3 +30,8 @@
 - source: the plan `docs/superpowers/plans/2026-09-05-v1-meter.md` Tasks 15 and 16
 - pages touched: decisions/2026-09-05_hook-is-a-swift-target.md, entities/runbooks/install_and_wire.md, README.md
 - notes: line format now `<model> · <effort> · U+26C1 <n>%`, 5h/7d dropped; test count 54 plus the fix-wave additions, 70 total from `make test`
+
+## [2026-09-05] ingest | Probe 2, per-model weekly window
+- source: docs/2026-09-05_statusline-probe-2.md (S3)
+- pages touched: sources/source_registry.md, synthesis/gaps_and_leads.md, decisions/2026-09-05_data-source-statusline-snapshot.md, index.md (Now block)
+- notes: Fable weekly row is usage-API only; statusline emits five_hour, seven_day, spend_limit; third meter deferred with a named trigger

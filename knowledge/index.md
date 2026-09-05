@@ -7,7 +7,7 @@
 - Active: watch whether the 30 s cadence and the 75/90 rules feel right; hook wired into settings.json on 2026-09-05 and reporting live (as of 2026-09-05)
 - Next: /pr-audit, PR to devel, then tag v0.1.0 on main after Daniel confirms the version (as of 2026-09-05)
 - Deferred: threshold notifications; Codex as a second provider (see synthesis/gaps_and_leads.md) (as of 2026-09-05)
-- Known: the statusline seven_day is the all-models weekly row (matches /usage "Current week (all models)"), so per-model weekly usage is not available to the meter (as of 2026-09-05)
+- Known: per-model weekly usage (the /usage Fable row) is not in the statusline payload; the builder emits five_hour, seven_day, spend_limit only, and the Fable row comes from the usage API the meter never calls (probe 2, S3) (as of 2026-09-05)
 
 ## Sources
 - [source_registry.md](sources/source_registry.md) -- registry of immutable inputs

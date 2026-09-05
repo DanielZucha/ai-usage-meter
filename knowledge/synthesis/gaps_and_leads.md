@@ -21,6 +21,11 @@
   `SnapshotStore.withExclusiveLock`. No trigger yet.
 - The Quit menu item's keyboard shortcut (`q`) has no visible affordance in
   the dropdown. No trigger yet.
+- The Fable per-model weekly window is not in the statusline payload on
+  Claude Code 2.1.261 (probe 2, [S3:F1][S3:F2]); the only source is the
+  usage API, which the data-source decision forbids. Trigger: a Claude Code
+  release that forwards `model_scoped` or `seven_day_overage_included` into
+  the statusline `rate_limits` block; then a third window is a small task.
 
 Related: [data-source decision](../decisions/2026-09-05_data-source-statusline-snapshot.md)
 
