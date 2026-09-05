@@ -1,11 +1,11 @@
 # Decision: the glyph ships as an SVG string constant, not a resource
 
 ## What was decided
-`assets/claude.svg` is embedded verbatim as `ClaudeGlyph.filledSVG` in
-MeterCore; a test keeps the constant byte-identical to the asset. The
-outline variant is derived at runtime by replacing the fill attribute with
-a stroke. The app turns each string into a template `NSImage` with
-`NSImage(data:)`.
+`assets/claude.svg` is embedded verbatim as the string constant
+`ClaudeGlyph.svg` in MeterCore; a test keeps the constant byte-identical to
+the asset. The app decodes that string once with `NSImage(data:)` and draws
+it into the composite menu-bar label (`LabelImage`): a template image in
+the normal state, an opaque-color image in the flipped state.
 
 ## Why
 SwiftPM resources for an executable target resolve through `Bundle.module`,
