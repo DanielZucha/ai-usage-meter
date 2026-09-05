@@ -1,9 +1,9 @@
 # Gaps and leads
 
 ## Open
-- None. The probe closed the last one: `rate_limits` arrives with both
-  windows on this account and CLI version, and the settings change was
-  picked up live by every running session. [S2:F1][S2:F3]
+- `schema_version` is written but never inspected on read, and there is no
+  migration hook; becomes a P3 debt issue at the first `currentSchemaVersion`
+  bump.
 
 ## Closed
 - 2026-09-05: whether `rate_limits` arrives at all. Yes; see
@@ -15,6 +15,12 @@
   limit surprises Daniel in use.
 - A second provider (Codex) would be an additional writer into the same
   provider-keyed snapshot. Nothing in version one should assume one provider.
+- Exact-multiple countdown boundaries are untested (e.g. remaining time
+  landing precisely on a day, hour, or minute mark). No trigger yet.
+- No test exercises the lock being released when `body` throws inside
+  `SnapshotStore.withExclusiveLock`. No trigger yet.
+- The Quit menu item's keyboard shortcut (`q`) has no visible affordance in
+  the dropdown. No trigger yet.
 
 Related: [data-source decision](../decisions/2026-09-05_data-source-statusline-snapshot.md)
 

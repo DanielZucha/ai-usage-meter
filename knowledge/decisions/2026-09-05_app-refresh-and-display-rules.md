@@ -3,11 +3,15 @@
 ## What was decided
 - Refresh: a 30-second timer re-reads the snapshot and recomputes the
   countdown. No file-system watcher.
-- Bar: the Claude glyph as a template image, then the 5-hour and 7-day
-  percentages, for example `42% · 18%`.
-- Dropdown: one row per window with utilization and countdown to reset,
-  snapshot age with source, Quit. Nothing per-session (context, cost stay
-  in the terminal statusline).
+- Bar: `assets/claude.svg` (single path, 24x24 viewBox, currentColor),
+  always filled, then the 5-hour and 7-day percentages, for example
+  `42% · 18%`. The label is drawn as one `NSImage`: a template image in
+  the normal state, an opaque-color image in the flipped state, since a
+  template cannot carry its own background.
+- Dropdown: a window-style panel (`menuBarExtraStyle(.window)`), one row
+  per window with the row text over a pill bar filled to the utilization,
+  then the age line with source and Quit. Nothing per-session (context,
+  cost stay in the terminal statusline); a native menu cannot host the bars.
 - Thresholds, monochrome only: at 75 percent the affected number turns
   bold; at 90 percent the whole label flips, a white background at half
   alpha with the glyph and the numbers in black. No color at any level,
@@ -15,13 +19,6 @@
 - Reset: once `resets_at` passes with no newer snapshot, that window shows
   zero. Absence before the first turn of a session leaves the previous
   snapshot standing. No snapshot at all shows the glyph with two dashes.
-- Glyph: `assets/claude.svg` (single path, 24x24 viewBox, currentColor),
-  always filled. The label is drawn as one `NSImage`: a template image in
-  the normal state, an opaque-color image in the flipped state, since a
-  template cannot carry its own background.
-- Dropdown: a window-style panel (`menuBarExtraStyle(.window)`), one row
-  per window with the row text over a pill bar filled to the utilization,
-  then the age line and Quit. A native menu cannot host the bars.
 - Both the meter and the Claude desktop app keep their asterisk; no
   variant glyph.
 
