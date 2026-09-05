@@ -66,12 +66,17 @@ public struct StatuslinePayload: Decodable, Sendable {
         try JSONDecoder().decode(StatuslinePayload.self, from: data)
     }
 
-    /// Nil when the payload carries no `rate_limits` block at all.
+    /// Nil when the payload carries no `rate_limits` block, or one with no
+    /// usable window: either way nothing arrived, so the stored snapshot and
+    /// its `captured_at` must stand rather than read as freshly updated.
     public func providerUsage(capturedAt: Date) -> ProviderUsage? {
         guard let rateLimits else { return nil }
+        let fiveHour = Self.window(from: rateLimits.fiveHour)
+        let sevenDay = Self.window(from: rateLimits.sevenDay)
+        guard fiveHour != nil || sevenDay != nil else { return nil }
         return ProviderUsage(
-            fiveHour: Self.window(from: rateLimits.fiveHour),
-            sevenDay: Self.window(from: rateLimits.sevenDay),
+            fiveHour: fiveHour,
+            sevenDay: sevenDay,
             capturedAt: capturedAt,
             source: Self.source
         )

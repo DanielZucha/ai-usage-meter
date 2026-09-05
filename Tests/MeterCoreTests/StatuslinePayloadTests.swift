@@ -43,11 +43,18 @@ import Testing
 
     @Test func dropsAWindowMissingEitherField() throws {
         let json = Data("""
-        {"rate_limits":{"five_hour":{"used_percentage":10},"seven_day":{"resets_at":1789160400}}}
+        {"rate_limits":{"five_hour":{"used_percentage":10},"seven_day":{"used_percentage":4,"resets_at":1789160400}}}
         """.utf8)
         let usage = try #require(try StatuslinePayload.decode(json).providerUsage(capturedAt: Fixtures.captured))
         #expect(usage.fiveHour == nil)
-        #expect(usage.sevenDay == nil)
+        #expect(usage.sevenDay?.usedPercentage == 4)
+    }
+
+    @Test func rateLimitsWithNoUsableWindowIsNoUsage() throws {
+        let json = Data("""
+        {"rate_limits":{"five_hour":{"used_percentage":10},"seven_day":{"resets_at":1789160400}}}
+        """.utf8)
+        #expect(try StatuslinePayload.decode(json).providerUsage(capturedAt: Fixtures.captured) == nil)
     }
 
     @Test func hugePercentageIsClampedNotTrapped() throws {

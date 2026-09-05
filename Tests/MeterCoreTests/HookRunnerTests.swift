@@ -41,6 +41,16 @@ import Testing
         #expect(store.read() == before)
     }
 
+    @Test func rateLimitsWithNoUsableWindowLeavesSnapshotUntouched() throws {
+        let store = temporaryStore()
+        _ = HookRunner.run(input: Fixtures.samplePayloadJSON, store: store, now: Fixtures.captured)
+        let before = store.read()
+        let hollow = Data(#"{"model":{"display_name":"Fable 5.1"},"rate_limits":{"five_hour":{"used_percentage":50},"seven_day":{"resets_at":1789160400}}}"#.utf8)
+        let line = HookRunner.run(input: hollow, store: store, now: Fixtures.captured.addingTimeInterval(5))
+        #expect(line == "Fable 5.1 · ⛁ --")
+        #expect(store.read() == before)
+    }
+
     @Test func garbageInputStillReturnsALineAndWritesNothing() {
         let store = temporaryStore()
         let line = HookRunner.run(input: Data("garbage".utf8), store: store, now: Fixtures.captured)
