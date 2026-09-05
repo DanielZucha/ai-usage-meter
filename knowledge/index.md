@@ -3,9 +3,9 @@
 <!-- Generated 2026-09-05 during the founding grill session -->
 
 ## Now
-- Phase: v1 audited on feature/v1-meter (six approvals, 72 tests); PR to devel next (as of 2026-09-05)
+- Phase: v0.1.0 released; PR #1 merged to devel, PR #2 to main, tag v0.1.0 on main, devel synced (as of 2026-09-05)
 - Active: watch whether the 30 s cadence and the 75/90 rules feel right; hook wired into settings.json on 2026-09-05 and reporting live (as of 2026-09-05)
-- Next: PR to devel, merge, then tag v0.1.0 on main after Daniel confirms the version (as of 2026-09-05)
+- Next: live with it; act on the gaps_and_leads triggers if one fires (resets_at unit, per-model window, schema bump) (as of 2026-09-05)
 - Deferred: threshold notifications; Codex as a second provider (see synthesis/gaps_and_leads.md) (as of 2026-09-05)
 - Known: per-model weekly usage (the /usage Fable row) is not in the statusline payload; the builder emits five_hour, seven_day, spend_limit only, and the Fable row comes from the usage API the meter never calls (probe 2, S3) (as of 2026-09-05)
 
