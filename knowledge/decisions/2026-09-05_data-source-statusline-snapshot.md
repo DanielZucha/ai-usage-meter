@@ -23,6 +23,9 @@ percentage and appears at the next turn.
   external token refresh can break Claude Code's own credential. [S1]
 - Utilization only changes when quota is consumed, so a stale snapshot plus
   a local countdown to `resets_at` renders correctly while idle. [S1]
+- Verified 2026-09-05 after wiring: the statusline's seven_day (10 percent)
+  matched /usage "Current week (all models)" (10 percent), not the
+  per-model row (14 percent). [S2]
 
 ## Alternatives considered
 - Endpoint polling (what public tools do): exact even between turns, but

@@ -3,10 +3,11 @@
 <!-- Generated 2026-09-05 during the founding grill session -->
 
 ## Now
-- Phase: build. Founding grill closed, probe confirmed the data source; no code yet (as of 2026-09-05)
-- Active: writing the implementation plan from the six decision pages (as of 2026-09-05)
-- Next: SwiftPM package with library, app and hook targets on a feature branch, PR to devel via /pr-audit (as of 2026-09-05)
+- Phase: v1 built on feature/v1-meter; awaiting /pr-audit and merge to devel (as of 2026-09-05)
+- Active: watch whether the 30 s cadence and the 75/90 rules feel right; hook wired into settings.json on 2026-09-05 and reporting live (as of 2026-09-05)
+- Next: /pr-audit, PR to devel, then tag v0.1.0 on main after Daniel confirms the version (as of 2026-09-05)
 - Deferred: threshold notifications; Codex as a second provider (see synthesis/gaps_and_leads.md) (as of 2026-09-05)
+- Known: the statusline seven_day is the all-models weekly row (matches /usage "Current week (all models)"), so per-model weekly usage is not available to the meter (as of 2026-09-05)
 
 ## Sources
 - [source_registry.md](sources/source_registry.md) -- registry of immutable inputs
@@ -17,6 +18,7 @@
 ### Integrations
 ### Data formats
 ### Runbooks
+- [install_and_wire.md](entities/runbooks/install_and_wire.md) -- make install, paste the snippet, verify, undo, toolchain traps
 
 ## Synthesis
 - [gaps_and_leads.md](synthesis/gaps_and_leads.md) -- open questions and leads
@@ -26,5 +28,8 @@
 - [2026-09-05_host-native-swift-menubarextra.md](decisions/2026-09-05_host-native-swift-menubarextra.md) -- native SwiftPM app with MenuBarExtra, no third-party runtime
 - [2026-09-05_snapshot-contract.md](decisions/2026-09-05_snapshot-contract.md) -- provider-keyed snapshot in Application Support, atomic rename, absence preserved
 - [2026-09-05_hook-is-a-swift-target.md](decisions/2026-09-05_hook-is-a-swift-target.md) -- hook is a compiled target sharing the model; prints one terminal line; installer never edits settings.json
-- [2026-09-05_app-refresh-and-display-rules.md](decisions/2026-09-05_app-refresh-and-display-rules.md) -- 30 s timer, glyph plus two numbers, bold at 70, filled glyph at 90, zero after reset
+- [2026-09-05_app-refresh-and-display-rules.md](decisions/2026-09-05_app-refresh-and-display-rules.md) -- 30 s timer, filled glyph plus two numbers, bold at 75, label flips at 90, zero after reset, window-style dropdown with pill bars
 - [2026-09-05_snapshot-merge-rule.md](decisions/2026-09-05_snapshot-merge-rule.md) -- every session writes; same window keeps the max, later reset replaces, epoch converted to ISO
+- [2026-09-05_glyph-embedded-svg-string.md](decisions/2026-09-05_glyph-embedded-svg-string.md) -- glyph travels as a Swift string constant, byte-identical to assets/claude.svg; no resource bundle
+
+**Last updated**: 2026-09-05
