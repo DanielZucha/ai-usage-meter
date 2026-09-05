@@ -10,7 +10,59 @@ TEST_FLAGS := -Xswiftc -F -Xswiftc $(CLT_DEV)/Frameworks \
 endif
 FILTER ?=
 
-.PHONY: test
+APP_NAME   = AI Usage Meter
+BUILD_DIR  = .build/release
+DIST       = dist
+APP        = $(DIST)/$(APP_NAME).app
+APP_DEST   = $(HOME)/Applications/$(APP_NAME).app
+HOOK_DEST  = $(HOME)/.local/bin/ai-usage-meter-hook
+SNAPSHOT   = $(HOME)/Library/Application Support/ai-usage-meter
+
+.PHONY: build test bundle install uninstall run clean snippet
+
+build:
+	swift build -c release
 
 test:
 	swift test $(TEST_FLAGS) $(if $(FILTER),--filter $(FILTER),)
+
+bundle: build
+	rm -rf "$(APP)"
+	mkdir -p "$(APP)/Contents/MacOS"
+	cp "$(BUILD_DIR)/AIUsageMeter" "$(APP)/Contents/MacOS/AIUsageMeter"
+	cp packaging/Info.plist "$(APP)/Contents/Info.plist"
+	plutil -lint "$(APP)/Contents/Info.plist"
+	codesign --force --sign - "$(APP)"
+
+install: bundle
+	mkdir -p "$(HOME)/.local/bin" "$(HOME)/Applications"
+	cp "$(BUILD_DIR)/ai-usage-meter-hook" "$(HOOK_DEST)"
+	chmod 755 "$(HOOK_DEST)"
+	-osascript -e 'tell application "AI Usage Meter" to quit' >/dev/null 2>&1
+	rm -rf "$(APP_DEST)"
+	cp -R "$(APP)" "$(APP_DEST)"
+	open "$(APP_DEST)"
+	@$(MAKE) --no-print-directory snippet
+
+snippet:
+	@echo ""
+	@echo "Add this to ~/.claude/settings.json (the installer never edits it):"
+	@echo ""
+	@echo '  "statusLine": {'
+	@echo '    "type": "command",'
+	@echo '    "command": "$(HOOK_DEST)"'
+	@echo '  }'
+	@echo ""
+
+uninstall:
+	-osascript -e 'tell application "AI Usage Meter" to quit' >/dev/null 2>&1
+	rm -rf "$(APP_DEST)"
+	rm -f "$(HOOK_DEST)"
+	@echo "Removed the app and the hook. Remove the statusLine entry from ~/.claude/settings.json by hand."
+	@echo "Snapshot left in place: $(SNAPSHOT)"
+
+run: build
+	"$(BUILD_DIR)/AIUsageMeter"
+
+clean:
+	rm -rf "$(DIST)" .build
