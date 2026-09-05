@@ -63,6 +63,28 @@ import Testing
         #expect(FileManager.default.fileExists(atPath: lockPath))
     }
 
+    @Test func exclusiveLockGivesUpAfterTheBoundAndRunsAnyway() throws {
+        let store = try temporaryStore()
+        try FileManager.default.createDirectory(at: store.fileURL.deletingLastPathComponent(), withIntermediateDirectories: true)
+        let lockPath = store.fileURL.deletingLastPathComponent().appendingPathComponent("snapshot.lock").path
+        let externalDescriptor = open(lockPath, O_CREAT | O_RDWR, 0o644)
+        #expect(externalDescriptor >= 0)
+        #expect(flock(externalDescriptor, LOCK_EX) == 0)
+        defer {
+            flock(externalDescriptor, LOCK_UN)
+            close(externalDescriptor)
+        }
+
+        var ran = false
+        let start = Date()
+        try store.withExclusiveLock { ran = true }
+        let elapsed = Date().timeIntervalSince(start)
+
+        #expect(ran)
+        #expect(elapsed >= SnapshotStore.lockTimeout)
+        #expect(elapsed < 1)
+    }
+
     @Test func exclusiveLockSerializesWriters() throws {
         let store = try temporaryStore()
         let group = DispatchGroup()
