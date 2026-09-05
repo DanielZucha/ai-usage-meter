@@ -1,0 +1,20 @@
+# Swift / SwiftPM
+.build/
+*.xcodeproj
+*.xcworkspace
+.swiftpm/
+DerivedData/
+
+# Local artifacts
+dist/
+*.app
+.DS_Store
+.idea/
+.vscode/
+
+# Never commit credentials or snapshots
+.env
+.env.*
+*.pem
+*.key
+snapshot*.json
