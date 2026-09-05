@@ -35,3 +35,16 @@
 - source: docs/2026-09-05_statusline-probe-2.md (S3)
 - pages touched: sources/source_registry.md, synthesis/gaps_and_leads.md, decisions/2026-09-05_data-source-statusline-snapshot.md, index.md (Now block)
 - notes: Fable weekly row is usage-API only; statusline emits five_hour, seven_day, spend_limit; third meter deferred with a named trigger
+
+## [2026-09-05] lint
+- contradictions: none
+- stale claims: none (superseded design bullets were folded on 2026-09-05; remaining mentions of the 70/90 outline design live in History sections only)
+- orphan pages: none
+- missing cross-refs: WIKI_SCHEMA.md and sources/source_registry.md carry no outbound link (utility pages; warning only)
+- now-block: fresh (all five lines dated 2026-09-05, no later log entry contradicts them)
+- claude-md: compliant (50 lines, static Now-block pointer, no mutable state)
+
+## [2026-09-05] ingest | PR audit round 1
+- source: six-agent audit verdicts (session), commits c822f0b and b7cc5be
+- pages touched: decisions/2026-09-05_pr-1_audit.md (new), synthesis/gaps_and_leads.md, index.md (Now block, catalog), WIKI_SCHEMA.md
+- notes: all six approve; HIGH freshness bug fixed; 72 tests

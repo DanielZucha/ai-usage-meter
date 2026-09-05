@@ -3,9 +3,9 @@
 <!-- Generated 2026-09-05 during the founding grill session -->
 
 ## Now
-- Phase: v1 built on feature/v1-meter; awaiting /pr-audit and merge to devel (as of 2026-09-05)
+- Phase: v1 audited on feature/v1-meter (six approvals, 72 tests); PR to devel next (as of 2026-09-05)
 - Active: watch whether the 30 s cadence and the 75/90 rules feel right; hook wired into settings.json on 2026-09-05 and reporting live (as of 2026-09-05)
-- Next: /pr-audit, PR to devel, then tag v0.1.0 on main after Daniel confirms the version (as of 2026-09-05)
+- Next: PR to devel, merge, then tag v0.1.0 on main after Daniel confirms the version (as of 2026-09-05)
 - Deferred: threshold notifications; Codex as a second provider (see synthesis/gaps_and_leads.md) (as of 2026-09-05)
 - Known: per-model weekly usage (the /usage Fable row) is not in the statusline payload; the builder emits five_hour, seven_day, spend_limit only, and the Fable row comes from the usage API the meter never calls (probe 2, S3) (as of 2026-09-05)
 
@@ -31,5 +31,6 @@
 - [2026-09-05_app-refresh-and-display-rules.md](decisions/2026-09-05_app-refresh-and-display-rules.md) -- 30 s timer, filled glyph plus two numbers, bold at 75, label flips at 90, zero after reset, window-style dropdown with pill bars
 - [2026-09-05_snapshot-merge-rule.md](decisions/2026-09-05_snapshot-merge-rule.md) -- every session writes; same window keeps the max, later reset replaces, epoch converted to ISO
 - [2026-09-05_glyph-embedded-svg-string.md](decisions/2026-09-05_glyph-embedded-svg-string.md) -- glyph travels as a Swift string constant, byte-identical to assets/claude.svg; no resource bundle
+- [2026-09-05_pr-1_audit.md](decisions/2026-09-05_pr-1_audit.md) -- v1 merges as audited; hollow rate_limits no longer refreshes captured_at; low notes recorded, not ticketed
 
 **Last updated**: 2026-09-05

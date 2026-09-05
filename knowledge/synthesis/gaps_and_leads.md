@@ -26,6 +26,9 @@
   usage API, which the data-source decision forbids. Trigger: a Claude Code
   release that forwards `model_scoped` or `seven_day_overage_included` into
   the statusline `rate_limits` block; then a third window is a small task.
+- A `resets_at` unit change upstream (seconds to milliseconds or ISO) would
+  render a clamped huge countdown or drop the window silently. Trigger:
+  Claude Code changes the unit; then reject values outside now-1d..now+60d.
 
 Related: [data-source decision](../decisions/2026-09-05_data-source-statusline-snapshot.md)
 
