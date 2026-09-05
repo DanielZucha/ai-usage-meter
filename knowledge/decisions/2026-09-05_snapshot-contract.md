@@ -20,6 +20,12 @@ owns.
 ## Evidence
 - Statusline windows can be absent independently and are dropped once
   `resets_at` passes. [S1]
+- The statusline delivers `resets_at` as epoch seconds; the hook converts
+  to ISO-8601 so the file is human-readable and the app parses one
+  format. [S2:F2]
+- Writes come from every running session, concurrently, so the hook merges
+  rather than overwrites; see the [merge rule](2026-09-05_snapshot-merge-rule.md).
+  [S2:F3][S2:F4]
 - Daniel named Codex as a future provider in the founding grill.
 
 ## Alternatives considered

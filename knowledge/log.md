@@ -15,3 +15,8 @@
 - source: grill session answers (Daniel), assets/claude.svg
 - pages touched: decisions/2026-09-05_snapshot-contract.md, decisions/2026-09-05_hook-is-a-swift-target.md, decisions/2026-09-05_app-refresh-and-display-rules.md, index.md, synthesis/gaps_and_leads.md
 - notes: all frontier questions settled; one parked item (statusline probe) awaits go-ahead
+
+## [2026-09-05] ingest | Statusline probe capture
+- source: docs/2026-09-05_statusline-probe.md
+- pages touched: decisions/2026-09-05_snapshot-merge-rule.md (new), decisions/2026-09-05_snapshot-contract.md, synthesis/gaps_and_leads.md, sources/source_registry.md, index.md
+- notes: rate_limits confirmed on 2.1.261; resets_at is epoch seconds; every running session renders concurrently with its own stale value, so the hook merges per window (max within a window, later reset wins); grill closed
