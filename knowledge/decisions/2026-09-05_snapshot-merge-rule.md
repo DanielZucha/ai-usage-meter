@@ -6,10 +6,9 @@ the incoming provider payload it compares `resets_at` with the stored
 window: a later `resets_at` replaces the stored window outright; the same
 `resets_at` keeps the larger `used_percentage`; an earlier `resets_at` is
 discarded as stale. The incoming `resets_at` (epoch seconds) is converted
-to ISO-8601 on write. Session-scoped fields (model, context, cost) are
-taken from the incoming payload as-is under a `session` object, since they
-describe the session that rendered last, and the terminal line prints
-them unchanged.
+to ISO-8601 on write. Session-scoped fields (model, context, cost) never
+enter the snapshot; they describe one session and belong only on the
+terminal line the hook prints.
 
 ## Why
 Every running Claude Code session invokes the statusline command, and each
@@ -26,6 +25,9 @@ window and legitimately restarts from a low number.
 - `resets_at` is epoch seconds in the payload. [S2:F2]
 - The statusline fires several times per turn, so the merge must stay a
   single small read plus one atomic write. [S2:F5]
+- Concurrent invocations interleave their read-merge-write, so the cycle
+  runs under an `flock(2)` on a sibling lock file; without it two writers
+  in the same second can drop the higher value. [S2:F3]
 
 ## Alternatives considered
 - Last writer wins: rejected, produces visible flicker between sessions.
