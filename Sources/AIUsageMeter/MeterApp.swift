@@ -1,5 +1,4 @@
 import SwiftUI
-import MeterCore
 
 @main
 struct MeterApp: App {
@@ -13,8 +12,8 @@ struct MeterApp: App {
         MenuBarExtra {
             MeterMenu(display: model.display)
         } label: {
-            MeterLabel(display: model.display)
+            MeterLabel(image: model.labelImage)
         }
-        .menuBarExtraStyle(.menu)
+        .menuBarExtraStyle(.window)
     }
 }

@@ -20,23 +20,27 @@ import Testing
         #expect(display.barText == "42% · 18%")
         #expect(display.fiveHour.isBold == false)
         #expect(display.sevenDay.isBold == false)
-        #expect(display.glyphFilled == false)
+        #expect(display.isFlipped == false)
+        #expect(display.fiveHour.fraction == 0.42)
+        #expect(display.sevenDay.fraction == 0.18)
         #expect(display.fiveHour.rowText == "5-hour  42% · resets in 2h 21m")
         #expect(display.sevenDay.rowText == "7-day  18% · resets in 6d 09h")
         #expect(display.ageText == "Updated 2 min ago · statusline")
     }
 
-    @Test func seventyBoldsOnlyTheAffectedNumber() {
-        let display = MeterDisplay.make(snapshot: snapshot(five: 70, seven: 69), now: now)
+    @Test func seventyFiveBoldsOnlyTheAffectedNumber() {
+        let display = MeterDisplay.make(snapshot: snapshot(five: 75, seven: 74), now: now)
         #expect(display.fiveHour.isBold == true)
         #expect(display.sevenDay.isBold == false)
-        #expect(display.glyphFilled == false)
+        #expect(display.isFlipped == false)
     }
 
-    @Test func ninetyFillsTheGlyph() {
+    @Test func ninetyFlipsTheLabel() {
         let display = MeterDisplay.make(snapshot: snapshot(five: 12, seven: 90), now: now)
-        #expect(display.glyphFilled == true)
+        #expect(display.isFlipped == true)
         #expect(display.sevenDay.isBold == true)
+        let below = MeterDisplay.make(snapshot: snapshot(five: 89, seven: 89), now: now)
+        #expect(below.isFlipped == false)
     }
 
     @Test func passedResetShowsZero() {
@@ -45,8 +49,9 @@ import Testing
         #expect(display.fiveHour.percent == 0)
         #expect(display.fiveHour.percentText == "0%")
         #expect(display.fiveHour.isBold == false)
+        #expect(display.fiveHour.fraction == 0)
         #expect(display.fiveHour.rowText == "5-hour  0% · reset")
-        #expect(display.glyphFilled == false)
+        #expect(display.isFlipped == false)
         #expect(display.sevenDay.percent == 40)
     }
 
@@ -54,13 +59,20 @@ import Testing
         let display = MeterDisplay.make(snapshot: snapshot(five: 42, seven: nil), now: now)
         #expect(display.barText == "42% · --")
         #expect(display.sevenDay.percent == nil)
+        #expect(display.sevenDay.fraction == 0)
         #expect(display.sevenDay.rowText == "7-day  --")
+    }
+
+    @Test func fractionIsClampedToOne() {
+        let display = MeterDisplay.make(snapshot: snapshot(five: 130, seven: 18), now: now)
+        #expect(display.fiveHour.fraction == 1)
+        #expect(display.isFlipped == true)
     }
 
     @Test func noSnapshotShowsDashesAndNoAge() {
         let display = MeterDisplay.make(snapshot: nil, now: now)
         #expect(display.barText == "-- · --")
-        #expect(display.glyphFilled == false)
+        #expect(display.isFlipped == false)
         #expect(display.ageText == "No snapshot yet")
     }
 }

@@ -8,15 +8,20 @@
 - Dropdown: one row per window with utilization and countdown to reset,
   snapshot age with source, Quit. Nothing per-session (context, cost stay
   in the terminal statusline).
-- Thresholds, monochrome only: at 70 percent the affected number turns
-  bold; at 90 percent the glyph fills solid. No color at any level, no
-  notifications.
+- Thresholds, monochrome only: at 75 percent the affected number turns
+  bold; at 90 percent the whole label flips, a white background at half
+  alpha with the glyph and the numbers in black. No color at any level,
+  no notifications.
 - Reset: once `resets_at` passes with no newer snapshot, that window shows
   zero. Absence before the first turn of a session leaves the previous
   snapshot standing. No snapshot at all shows the glyph with two dashes.
 - Glyph: `assets/claude.svg` (single path, 24x24 viewBox, currentColor),
-  rendered as a template image. The normal state is the outline of that
-  path; the 90-percent state is the filled path.
+  always filled. The label is drawn as one `NSImage`: a template image in
+  the normal state, an opaque-color image in the flipped state, since a
+  template cannot carry its own background.
+- Dropdown: a window-style panel (`menuBarExtraStyle(.window)`), one row
+  per window with the row text over a pill bar filled to the utilization,
+  then the age line and Quit. A native menu cannot host the bars.
 - Both the meter and the Claude desktop app keep their asterisk; no
   variant glyph.
 
@@ -26,6 +31,11 @@ needed for the countdown anyway. Daniel asked for a clear, modern,
 minimalist look; a weight change and a fill are the alerts that idiom
 allows. Utilization only changes when quota is consumed, so a stale
 snapshot plus a local countdown is correct while idle.
+
+First look on 2026-09-05: Daniel asked for the star always filled with a
+wider gap, bold at 75 rather than 70, the flipped label instead of a fill
+change at 90, and pill bars in the dropdown. The outline-versus-filled
+signal read as an unfilled icon rather than a state.
 
 ## Evidence
 - Statusline windows drop after `resets_at`. [S1]
@@ -42,5 +52,10 @@ snapshot plus a local countdown is correct while idle.
 
 Related: [snapshot contract](2026-09-05_snapshot-contract.md),
 [host decision](2026-09-05_host-native-swift-menubarextra.md)
+
+## History
+- 2026-09-05: thresholds 70/90 with outline-to-filled glyph superseded the
+  same day by 75 bold / 90 flip, always-filled glyph, window-style dropdown
+  with pill bars, after the first installed build.
 
 **Last updated**: 2026-09-05
