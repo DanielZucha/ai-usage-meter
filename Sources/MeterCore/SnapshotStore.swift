@@ -45,7 +45,12 @@ public struct SnapshotStore: Sendable {
         let temporary = directory.appendingPathComponent(
             ".\(Self.fileName).\(ProcessInfo.processInfo.processIdentifier).\(UUID().uuidString).tmp"
         )
-        try data.write(to: temporary)
+        do {
+            try data.write(to: temporary)
+        } catch {
+            try? FileManager.default.removeItem(at: temporary)
+            throw error
+        }
         guard rename(temporary.path, fileURL.path) == 0 else {
             let code = errno
             try? FileManager.default.removeItem(at: temporary)

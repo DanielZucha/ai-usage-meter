@@ -32,10 +32,10 @@
 - [ ] `literature/` — <author><year>.md with structured claims
 
 ### Tooling entity types
-- [x] `entities/components/` — one file per module / Nextflow process / Shiny module
+- [ ] `entities/components/` (provisioned, unpopulated in v1) — one file per module / Nextflow process / Shiny module
 - [ ] `entities/processes/` — pipeline processes: inputs, outputs, resources, known issues
-- [x] `entities/integrations/` — external services: API, auth, rate limits, failure modes
-- [x] `entities/data_formats/` — SpatialData / AnnData / CSV schemas, fields, constraints
+- [ ] `entities/integrations/` (provisioned, unpopulated in v1) — external services: API, auth, rate limits, failure modes
+- [ ] `entities/data_formats/` (provisioned, unpopulated in v1) — SpatialData / AnnData / CSV schemas, fields, constraints
 - [x] `entities/runbooks/` — how to run, common failures, recovery steps
 
 ## Project-specific page fields

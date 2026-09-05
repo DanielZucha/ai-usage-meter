@@ -41,8 +41,10 @@ install: bundle
 	mv -f "$(HOOK_DEST).new" "$(HOOK_DEST)"
 	-osascript -e 'tell application "AI Usage Meter" to quit' >/dev/null 2>&1
 	@for i in 1 2 3 4 5 6; do pgrep -x "AIUsageMeter" >/dev/null 2>&1 || break; sleep 0.5; done
+	rm -rf "$(APP_DEST).new"
+	cp -R "$(APP)" "$(APP_DEST).new"
 	rm -rf "$(APP_DEST)"
-	cp -R "$(APP)" "$(APP_DEST)"
+	mv "$(APP_DEST).new" "$(APP_DEST)"
 	open "$(APP_DEST)"
 	@$(MAKE) --no-print-directory snippet
 
