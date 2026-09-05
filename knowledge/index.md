@@ -4,8 +4,8 @@
 
 ## Now
 - Phase: design. Founding grill in progress; repo scaffolded, no code yet (as of 2026-09-05)
-- Active: settle the remaining grill decisions (snapshot contract, hook language, glyph, threshold visuals), then /design the menu-bar look (as of 2026-09-05)
-- Next: run the statusline probe to confirm `rate_limits` arrives on this account, pending Daniel's go-ahead to edit settings.json (as of 2026-09-05)
+- Active: founding grill closed except the probe; every decision filed under decisions/ (as of 2026-09-05)
+- Next: run the statusline probe (temporary statusLine in settings.json, one prompt, revert) to confirm `rate_limits` arrives, then /design the menu-bar look, then write the plan (as of 2026-09-05)
 
 ## Sources
 - [source_registry.md](sources/source_registry.md) -- registry of immutable inputs
@@ -23,3 +23,6 @@
 ## Decisions
 - [2026-09-05_data-source-statusline-snapshot.md](decisions/2026-09-05_data-source-statusline-snapshot.md) -- read usage from the official statusline JSON via a snapshot file; never touch credentials
 - [2026-09-05_host-native-swift-menubarextra.md](decisions/2026-09-05_host-native-swift-menubarextra.md) -- native SwiftPM app with MenuBarExtra, no third-party runtime
+- [2026-09-05_snapshot-contract.md](decisions/2026-09-05_snapshot-contract.md) -- provider-keyed snapshot in Application Support, atomic rename, absence preserved
+- [2026-09-05_hook-is-a-swift-target.md](decisions/2026-09-05_hook-is-a-swift-target.md) -- hook is a compiled target sharing the model; prints one terminal line; installer never edits settings.json
+- [2026-09-05_app-refresh-and-display-rules.md](decisions/2026-09-05_app-refresh-and-display-rules.md) -- 30 s timer, glyph plus two numbers, bold at 70, filled glyph at 90, zero after reset
