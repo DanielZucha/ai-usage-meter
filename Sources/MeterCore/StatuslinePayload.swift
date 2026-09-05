@@ -9,6 +9,10 @@ public struct StatuslinePayload: Decodable, Sendable {
         enum CodingKeys: String, CodingKey { case displayName = "display_name" }
     }
 
+    public struct Effort: Decodable, Sendable {
+        public var level: String?
+    }
+
     public struct ContextWindow: Decodable, Sendable {
         public var usedPercentage: Double?
         enum CodingKeys: String, CodingKey { case usedPercentage = "used_percentage" }
@@ -34,11 +38,13 @@ public struct StatuslinePayload: Decodable, Sendable {
     }
 
     public var model: Model?
+    public var effort: Effort?
     public var contextWindow: ContextWindow?
     public var rateLimits: RateLimits?
 
     enum CodingKeys: String, CodingKey {
         case model
+        case effort
         case contextWindow = "context_window"
         case rateLimits = "rate_limits"
     }

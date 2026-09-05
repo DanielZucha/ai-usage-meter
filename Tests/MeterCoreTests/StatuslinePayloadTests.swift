@@ -6,6 +6,7 @@ import Testing
     @Test func decodesTheRealCapture() throws {
         let payload = try StatuslinePayload.decode(Fixtures.samplePayloadJSON)
         #expect(payload.model?.displayName == "Fable 5.1")
+        #expect(payload.effort?.level == "high")
         #expect(payload.contextWindow?.usedPercentage == 12)
         #expect(payload.rateLimits?.fiveHour?.usedPercentage == 21)
         #expect(payload.rateLimits?.fiveHour?.resetsAt == 1_788_617_400)

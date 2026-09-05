@@ -8,10 +8,12 @@ public enum StatuslineLine {
 
     public static func render(_ payload: StatuslinePayload?) -> String {
         let model = payload?.model?.displayName ?? fallbackModel
+        let effort = payload?.effort?.level
         let context = percent(payload?.contextWindow?.usedPercentage)
         let fiveHour = percent(payload?.rateLimits?.fiveHour?.usedPercentage)
         let sevenDay = percent(payload?.rateLimits?.sevenDay?.usedPercentage)
-        return [model, "ctx \(context)", "5h \(fiveHour)", "7d \(sevenDay)"].joined(separator: separator)
+        return ([model] + (effort.map { [$0] } ?? []) + ["ctx \(context)", "5h \(fiveHour)", "7d \(sevenDay)"])
+            .joined(separator: separator)
     }
 
     static func percent(_ value: Double?) -> String {

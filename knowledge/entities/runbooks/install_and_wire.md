@@ -15,8 +15,8 @@
 ## Checks
 - `cat "$HOME/Library/Application Support/ai-usage-meter/snapshot.json"`
   shows `providers.claude` with two windows and ISO-8601 dates.
-- The terminal status bar shows `<model> · ctx <n>% · 5h <n>% · 7d <n>%`;
-  the menu bar follows within 30 seconds.
+- The terminal status bar shows `<model> · <effort> · ctx <n>% · 5h <n>% ·
+  7d <n>%`; the menu bar follows within 30 seconds.
 - Login Items lists "AI Usage Meter".
 - The 7-day number equals the `/usage` row "Current week (all models)", not
   the per-model row.

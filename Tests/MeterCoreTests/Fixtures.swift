@@ -10,6 +10,7 @@ enum Fixtures {
      "cwd":"/Users/zuixote/Documents/carta_genum/projects/ai-usage-meter",
      "model":{"id":"claude-fable-5-1","display_name":"Fable 5.1"},
      "version":"2.1.261",
+     "effort":{"level":"high"},
      "cost":{"total_cost_usd":8.343004900000002,"total_duration_ms":4110311},
      "context_window":{"total_input_tokens":118695,"context_window_size":1000000,
        "used_percentage":12,"remaining_percentage":88},
