@@ -10,8 +10,9 @@ hook writes a small snapshot file, and the menu-bar app reads that file.
    every API response, passing the documented statusline JSON on stdin.
 2. The hook merges the `rate_limits` block into
    `~/Library/Application Support/ai-usage-meter/snapshot.json` and prints
-   one line back to the terminal: `Fable 5.1 · high · ctx 12% · 5h 21% ·
-   7d 4%` (the effort word is omitted when Claude Code does not send one).
+   one line back to the terminal: `Fable 5.1 · high · ctx 12%` (the effort
+   word is omitted when Claude Code does not send one). The 5-hour and
+   7-day rate limits live in the menu bar, not the terminal line.
 3. The menu-bar app re-reads the snapshot every 30 seconds and shows the
    Claude glyph with `21% · 4%`. A number turns bold at 75 percent; at 90
    percent the whole label flips to black on a white background. Clicking

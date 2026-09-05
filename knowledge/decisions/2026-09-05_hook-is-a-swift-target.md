@@ -5,9 +5,8 @@ The SwiftPM package has three targets: a library with the snapshot model,
 parsing, formatting, and threshold rules; the menu-bar app; and a hook
 executable that Claude Code invokes as its statusline command. The hook
 reads the statusline JSON from stdin, writes the snapshot, and prints one
-line: `<model> · <effort> · ctx <n>% · 5h <n>% · 7d <n>%`. It never blocks
-and never writes to stderr; on any failure it prints whatever it can and
-exits zero.
+line: `<model> · <effort> · ctx <n>%`. It never blocks and never writes to
+stderr; on any failure it prints whatever it can and exits zero.
 `make install` copies the binary to `~/.local/bin` and prints the
 settings.json snippet; it does not edit settings.json.
 
@@ -33,6 +32,9 @@ Related: [snapshot contract](2026-09-05_snapshot-contract.md)
 - 2026-09-05: added the optional effort word (`payload.effort.level`)
   between the model and the context segment, requested after first use.
   Omitted, not dashed, when the payload carries no effort block, since it
-  is a session property rather than a meter.
+  is a session property rather than a meter. Same day: removed the 5h and
+  7d segments from the printed line, since the menu bar already shows
+  both rate-limit windows; the hook still merges `rate_limits` into the
+  snapshot exactly as before, only the printed line got shorter.
 
 **Last updated**: 2026-09-05

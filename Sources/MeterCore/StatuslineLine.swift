@@ -10,9 +10,7 @@ public enum StatuslineLine {
         let model = payload?.model?.displayName ?? fallbackModel
         let effort = payload?.effort?.level
         let context = percent(payload?.contextWindow?.usedPercentage)
-        let fiveHour = percent(payload?.rateLimits?.fiveHour?.usedPercentage)
-        let sevenDay = percent(payload?.rateLimits?.sevenDay?.usedPercentage)
-        return ([model] + (effort.map { [$0] } ?? []) + ["ctx \(context)", "5h \(fiveHour)", "7d \(sevenDay)"])
+        return ([model] + (effort.map { [$0] } ?? []) + ["ctx \(context)"])
             .joined(separator: separator)
     }
 
