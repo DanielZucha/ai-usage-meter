@@ -84,3 +84,33 @@
 - source: six-role audit of commits b5836ee and 234c0e2
 - pages touched: decisions/2026-09-06_pr-4_audit.md, index.md
 - notes: all merge criteria pass after accessibility, stable-launcher, shell-injection, project-orientation, and hook-trust fixes; 100 Swift tests plus the snippet integration test pass
+
+## [2026-09-06] ingest | Approved app-owned Codex polling correction
+- source: user-approved revised plan and session diagnosis; decisions/2026-09-06_codex-app-owned-polling.md
+- pages touched: decisions/2026-09-06_codex-app-owned-polling.md, decisions/2026-09-06_codex-app-server-snapshot.md, decisions/2026-09-06_pr-4_audit.md, decisions/2026-09-05_app-refresh-and-display-rules.md, decisions/2026-09-05_snapshot-contract.md, entities/runbooks/install_and_wire.md, synthesis/gaps_and_leads.md, WIKI_SCHEMA.md, index.md
+- notes: documented the approved independent polling contract, superseded Stop-hook scheduling, and marked the previous audit historical; live verification and renewed review remained pending
+
+## [2026-09-06] lint
+- contradictions: none in current policy; historical Stop-hook decisions explicitly superseded or scoped to Claude
+- stale claims: original PR 4 audit marked historical; renewed audit and live polling validation pending
+- orphan pages: none; new polling decision cataloged in index
+- missing cross-refs: none; all relative wiki links resolved
+- now-block: reflects implementation in progress and merge hold
+
+## [2026-09-06] ingest | Live polling exposed Codex reset-time merge failure
+- source: sanitized live comparison reported during implementation; decisions/2026-09-06_codex-app-owned-polling.md
+- pages touched: decisions/2026-09-06_codex-app-owned-polling.md, decisions/2026-09-05_snapshot-merge-rule.md, entities/runbooks/install_and_wire.md, index.md
+- notes: 30-second captures occurred but the shared merge retained 12% against a current 23% reading with a one-second earlier reset; documented Codex provider replacement and pending regression/redeployment verification
+
+## [2026-09-06] ingest | Polling revision installed and audited
+- source: 108-test coverage run, sanitized installed capture comparisons, and renewed six-role review; decisions/2026-09-06_pr-4_polling_audit.md
+- pages touched: decisions/2026-09-06_pr-4_polling_audit.md, decisions/2026-09-06_codex-app-owned-polling.md, decisions/2026-09-05_snapshot-contract.md, entities/runbooks/install_and_wire.md, synthesis/gaps_and_leads.md, WIKI_SCHEMA.md, index.md
+- notes: verified recurring captures and 24% to 26% usage increase; bracketed a 26% app capture with matching direct reads/reset; recorded core/model coverage and 75.87% package coverage; six-role audit passed, cloud workflow absent, and merge remained on hold for monitoring
+
+## [2026-09-06] lint
+- contradictions: none; Codex replacement and Claude monotonic merge explicitly separated
+- stale claims: none in current policy; original audit preserved as historical and linked to renewed audit
+- orphan pages: none; renewed audit cataloged and cross-linked
+- missing cross-refs: none; relative wiki links resolved and custom evidence tags declared
+- now-block: fresh; installed/verified revision awaits PR update and user monitoring
+- claude-md: compliant; 47-line durable AGENTS.md and CLAUDE.md delegation

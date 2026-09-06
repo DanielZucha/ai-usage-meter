@@ -11,11 +11,14 @@ and 7-day utilization, while Codex Pro has its 7-day utilization.
    `~/Library/Application Support/ai-usage-meter/snapshot.json` and prints the
    CLI line `<model> · <effort> · ⛁ <context>%` (without the effort field
    when Claude Code omits it).
-2. Codex runs `ai-usage-meter-codex-hook` from an asynchronous `Stop` hook
-   after a completed turn. The hook discards its stdin without parsing or
-   logging it, launches the configured Codex executable as an
+2. The app fetches Codex usage at launch and every 30 seconds. It launches
+   the configured Codex executable as a short-lived
    [App Server](https://learn.chatgpt.com/docs/app-server), requests
-   `account/rateLimits/read`, and merges the result into the same snapshot.
+   `account/rateLimits/read`, and merges a successful result into the same
+   snapshot. The bounded process runs away from the UI thread. Overlapping
+   polls are skipped, with a separate process lock protecting collection.
+   Each successful account read replaces the Codex provider entry, including
+   its percentage and reset time; Claude's session merge rules are unchanged.
 3. The app re-reads the snapshot every 30 seconds and presents two menu-bar
    items. Claude is followed by `<5-hour>% · <7-day>%`; Codex is followed by
    `<7-day>%`. A number turns bold at 75 percent; at 90 percent the whole label
@@ -23,16 +26,16 @@ and 7-day utilization, while Codex Pro has its 7-day utilization.
    one pill bar per visible window, snapshot age, and Quit.
 
 Windows that have reset show 0 percent until the next provider update. A
-missing provider snapshot shows dashes. Codex freshness is best effort: its
-hook is intentionally asynchronous, so a hook can finish after a later turn
-or be interrupted when a session exits; the app always shows the captured
-snapshot age.
+missing provider snapshot shows dashes. The Codex panel's age means time since
+the last successful capture, even if the percentage was unchanged. A failed
+refresh preserves the prior value and timestamp and shows `Refresh unavailable`.
+Polling continues while the app runs, independently of Codex session hooks.
 
 ## Credential boundary
 
-Neither hook nor the app reads API keys, OAuth tokens, Codex `auth.json`, or
+Neither the Claude hook nor the app reads API keys, OAuth tokens, Codex `auth.json`, or
 the macOS Keychain. Claude supplies usage in status-line stdin. For Codex, the
-hook starts the user's own authenticated Codex CLI process and communicates
+app starts the user's own authenticated Codex CLI process and communicates
 with it over stdio; credential handling remains inside Codex.
 
 ## Install
@@ -43,7 +46,7 @@ Requirements:
 - Claude Code for the Claude meter.
 - For the Codex meter, a Codex CLI that supports App Server rate-limit reads,
   signed in with an active Codex subscription. `codex` must be on `PATH` when
-  `make snippet` runs.
+  `make install` runs.
 
 Run:
 
@@ -55,39 +58,42 @@ Tools' SwiftPM does not wire in swift-testing on its own, and the Makefile adds
 the required flags.
 
 `make install` builds and launches `AI Usage Meter.app`, registers it to launch
-at login, installs
-`~/.local/bin/ai-usage-meter-hook` and
-`~/.local/bin/ai-usage-meter-codex-hook`, and then runs `make snippet`.
-When `codex` is available on `PATH`, the snippet command prints three blocks
-for you to apply manually; otherwise it prints the Claude block and explains
-how to rerun the command for Codex:
+at login, installs `~/.local/bin/ai-usage-meter-hook`, and then runs
+`make snippet`. It saves the stable Codex launcher path atomically in
+`~/Library/Application Support/ai-usage-meter/codex-launcher` with mode `0600`.
+If Codex is missing or its launcher moves, install from a shell where `codex`
+is available on `PATH`. The app retains its last successful reading when the
+configured launcher is unavailable.
+Installing without `codex` on `PATH` removes any stale launcher configuration;
+Claude remains available. Rerun the install with Codex available to enable
+polling.
+
+The snippet command prints configuration for you to apply manually:
 
 1. The Claude `statusLine` entry for `~/.claude/settings.json`.
-2. A Codex asynchronous `Stop` hook entry to merge into
-   `~/.codex/hooks.json`. The printed command pins the absolute paths of both
-   the installed hook and the stable Codex launcher.
-3. The native Codex footer configuration for `~/.codex/config.toml`:
+2. The native Codex footer configuration for `~/.codex/config.toml`:
 
        [tui]
        status_line = ["model-with-reasoning", "context-remaining"]
 
 The Codex footer uses Codex's native
 [status-line configuration](https://learn.chatgpt.com/docs/config-file/config-sample)
-to show the CLI model, reasoning effort, and remaining context. The usage hook
-is a separate [Codex `Stop` hook](https://learn.chatgpt.com/docs/hooks).
+to show the CLI model, reasoning effort, and remaining context.
 Neither `make install` nor `make snippet` edits Claude or Codex configuration.
-After adding the Codex hook, run `/hooks` inside Codex, review it, and mark it
-trusted. Codex skips unmanaged hooks until they are trusted. Run `make snippet`
-again whenever you need the current manual configuration.
+Run `make snippet` again whenever you need the current manual configuration.
 
-`make uninstall` removes the app and both installed hook executables. Remove
-their Claude and Codex configuration entries by hand; the snapshot is retained.
+Upgrading from the preview removes the obsolete
+`~/.local/bin/ai-usage-meter-codex-hook` executable. Remove only that hook's
+entry from `~/.codex/hooks.json` manually, preserving unrelated hooks. The
+installer prints this reminder; automatic Codex polling needs no `Stop` hook.
+
+`make uninstall` removes the app, launcher configuration, and installed hook executables. Remove
+their configuration entries by hand; the snapshot is retained.
 
 ## Layout
 
-    Sources/MeterCore       schema, provider clients, merge, storage, formatting
+    Sources/MeterCore       schema, provider clients, polling, launcher, storage
     Sources/MeterHook       Claude status-line executable
-    Sources/MeterCodexHook  Codex App Server Stop-hook executable
     Sources/AIUsageMeter    the two-item SwiftUI MenuBarExtra shell
     Tests/MeterCoreTests    Swift Testing suites
     assets/                 source SVGs for the embedded provider glyphs

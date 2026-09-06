@@ -5,30 +5,31 @@
 - macOS 14 or later and Swift 6 from the Command Line Tools.
 - Claude Code for the Claude meter.
 - For the Codex meter, an authenticated Codex CLI with an active subscription
-  and App Server rate-limit support. `codex` must be on `PATH` while rendering
-  the configuration snippet.
+  and App Server rate-limit support. `codex` must be on `PATH` during install.
 
 ## Steps
 
 1. `make test` must pass. Do not use bare `swift test`.
-2. Run `make install`. It builds and launches the app and installs both hooks:
-   `~/.local/bin/ai-usage-meter-hook` and
-   `~/.local/bin/ai-usage-meter-codex-hook`.
+2. Run `make install`. It builds and launches the app, installs
+   `~/.local/bin/ai-usage-meter-hook`, and saves the stable Codex launcher path
+   atomically with mode `0600` in
+   `~/Library/Application Support/ai-usage-meter/codex-launcher`.
 3. Run `make snippet` if the install output is no longer visible.
 4. Paste the printed Claude `statusLine` object into
    `~/.claude/settings.json` by hand.
-5. Merge the printed asynchronous `Stop` hook entry into the `Stop` array in
-   `~/.codex/hooks.json`. Keep the absolute hook and Codex executable paths
-   printed by the command.
-6. Start Codex, run `/hooks`, review the new hook, and mark it trusted. Codex
-   skips unmanaged hooks until this review is complete.
-7. Add the printed native footer configuration to `~/.codex/config.toml`:
+5. When upgrading the preview, manually remove only the obsolete
+   `ai-usage-meter-codex-hook` entry from `~/.codex/hooks.json`, preserving
+   other hooks. The installer removes that executable and prints a reminder.
+6. Add the printed native footer configuration to `~/.codex/config.toml`:
 
        [tui]
        status_line = ["model-with-reasoning", "context-remaining"]
 
 The installer never edits any of these files, consistent with the
 [hook decision](../../decisions/2026-09-05_hook-is-a-swift-target.md).
+When Codex is missing from `PATH`, installation removes stale launcher
+configuration and the old hook executable while preserving the usage snapshot.
+Rerun `make install` with Codex available to enable polling. [ADR:codex-polling]
 
 ## Checks
 
@@ -36,13 +37,20 @@ The installer never edits any of these files, consistent with the
   `<model> · <effort> · ⛁ <n>%` (effort is omitted when unavailable),
   `snapshot.json` contains `providers.claude`, and its menu-bar item follows
   on the next 30-second refresh.
-- Complete one Codex turn. Its native footer shows model plus reasoning and
-  remaining context, and the asynchronous hook adds `providers.codex` on a
-  best-effort basis. The Codex menu-bar item follows on the next refresh with
-  one 7-day percentage and one 7-day panel row.
-- If the Codex age keeps increasing, run `/hooks` and verify the `Stop` hook is
-  present, enabled, and trusted. The app polls the snapshot every 30 seconds;
-  it cannot create a new Codex snapshot when the hook has not run.
+- Codex usage is fetched at app launch and every 30 seconds, even without a
+  completed turn or configured hook. Observe at least three cycles: successful
+  captures renew the displayed age even when the percentage stays unchanged.
+  Compare the one 7-day percentage with the same weekly window in Codex
+  `/status`; its native footer separately shows model, effort, and context.
+  A renewed timestamp alone is insufficient: verify the percentage and reset
+  window too. The initial live poll exposed a reset-time merge bug that kept
+  12% despite a 23% current account response. Successful Codex reads must
+  replace its provider entry; Claude's session merge remains unchanged.
+  [ADR:codex-polling]
+- If Codex age keeps increasing or the panel shows `Refresh unavailable`,
+  check that the configured launcher still exists, is executable, and Codex is
+  signed in. Rerun `make install` with `codex` on `PATH` to refresh the launcher
+  configuration. A failed read leaves the prior value and capture time intact.
 - `cat "$HOME/Library/Application Support/ai-usage-meter/snapshot.json"`
   shows available provider windows with ISO-8601 dates.
 - Both menu-bar items use the same color rules: numbers become bold at 75
@@ -52,21 +60,29 @@ The installer never edits any of these files, consistent with the
 - The Claude 7-day number equals the `/usage` row "Current week (all models)",
   not the per-model row.
 
-The Codex `Stop` hook is asynchronous. Its snapshot can lag, complete out of
-turn order, or be interrupted when a session exits; use the age displayed in
-the provider panel when assessing freshness.
+These Codex checks are repeatable acceptance checks for the
+[app-owned polling change](../../decisions/2026-09-06_codex-app-owned-polling.md);
+the [renewed audit](../../decisions/2026-09-06_pr-4_polling_audit.md) records
+successful installed captures and matching direct reads after the merge fix.
+User monitoring and merge status remain in the [Now block](../../index.md).
+[PRAudit:2] A poll is a bounded, short-lived App Server
+exchange off the main actor. An actor busy flag and a separate process poll
+lock prevent overlapping fetches. The snapshot lock only covers the final
+provider replacement/write, preserving independent Claude writes.
+[ADR:codex-polling]
 
 ## Credential check
 
-The app and hooks must not read or log API keys, OAuth tokens, Codex
+The app and Claude hook must not read or log API keys, OAuth tokens, Codex
 `auth.json`, Keychain values, or Codex hook stdin. Codex usage is obtained by
 launching the user's authenticated Codex CLI as an App Server over stdio.
 
 ## Undo
 
-- Run `make uninstall`.
-- Remove the Claude `statusLine` entry, the Codex `Stop` hook entry, and the
-  Codex `[tui]` status-line fields by hand. The snapshot remains on disk.
+- Run `make uninstall`; this also removes the saved launcher configuration.
+- Remove the Claude `statusLine` entry and, if desired, the Codex `[tui]`
+  status-line fields by hand. Remove any leftover preview Codex hook entry
+  without disturbing unrelated hooks. The snapshot remains on disk.
 
 ## Toolchain traps
 

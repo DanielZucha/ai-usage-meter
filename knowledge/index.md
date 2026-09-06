@@ -3,9 +3,9 @@
 <!-- Generated 2026-09-05 during the founding grill session -->
 
 ## Now
-- Phase: Codex counterpart audited and proposed to devel as PR 4 (as of 2026-09-06)
-- Active: review PR 4 and wire the printed Codex Stop hook through `/hooks` (as of 2026-09-06)
-- Next: merge PR 4 after cloud review, then verify live per-turn Codex freshness (as of 2026-09-06)
+- Phase: app-owned Codex polling installed, live values verified, renewed six-role audit complete; PR 4 open (as of 2026-09-06)
+- Active: user monitoring of automatic refresh after both freshness fixes (as of 2026-09-06)
+- Next: commit/push the verified revision and update PR 4; merge remains on hold for monitoring feedback (as of 2026-09-06)
 - Deferred: threshold notifications (as of 2026-09-06)
 - Known: per-model weekly usage (the /usage Fable row) is not in the statusline payload; the builder emits five_hour, seven_day, spend_limit only, and the Fable row comes from the usage API the meter never calls (probe 2, S3) (as of 2026-09-05)
 
@@ -31,11 +31,13 @@
 - [2026-09-05_snapshot-contract.md](decisions/2026-09-05_snapshot-contract.md) -- provider-keyed snapshot in Application Support, atomic rename, absence preserved
 - [2026-09-05_hook-is-a-swift-target.md](decisions/2026-09-05_hook-is-a-swift-target.md) -- hook is a compiled target sharing the model; prints one terminal line; installer never edits settings.json
 - [2026-09-05_app-refresh-and-display-rules.md](decisions/2026-09-05_app-refresh-and-display-rules.md) -- 30 s timer, filled glyph plus two numbers, bold at 75, label flips at 90, zero after reset, window-style dropdown with pill bars
-- [2026-09-05_snapshot-merge-rule.md](decisions/2026-09-05_snapshot-merge-rule.md) -- every session writes; same window keeps the max, later reset replaces, epoch converted to ISO
+- [2026-09-05_snapshot-merge-rule.md](decisions/2026-09-05_snapshot-merge-rule.md) -- Claude session merge keeps the max for the same window; serialized Codex reads use provider replacement
 - [2026-09-05_glyph-embedded-svg-string.md](decisions/2026-09-05_glyph-embedded-svg-string.md) -- glyph travels as a Swift string constant, byte-identical to assets/claude.svg; no resource bundle
 - [2026-09-05_pr-1_audit.md](decisions/2026-09-05_pr-1_audit.md) -- v1 merges as audited; hollow rate_limits no longer refreshes captured_at; low notes recorded, not ticketed
-- [2026-09-06_codex-app-server-snapshot.md](decisions/2026-09-06_codex-app-server-snapshot.md) -- authenticated App Server usage writer, async Stop hook, native Codex footer, exact provider glyph
+- [2026-09-06_codex-app-server-snapshot.md](decisions/2026-09-06_codex-app-server-snapshot.md) -- retained authenticated App Server source; historical Stop-hook scheduling superseded
+- [2026-09-06_codex-app-owned-polling.md](decisions/2026-09-06_codex-app-owned-polling.md) -- verified launch/30-second collection, authoritative Codex replacement, successful-capture age, and hook retirement
 - [2026-09-06_codex-pro-weekly-only.md](decisions/2026-09-06_codex-pro-weekly-only.md) -- Codex Pro decodes and renders only its 7-day window; Claude remains unchanged
-- [2026-09-06_pr-4_audit.md](decisions/2026-09-06_pr-4_audit.md) -- Codex counterpart passed the six-role audit after accessibility, launcher, injection, and hook-trust fixes
+- [2026-09-06_pr-4_audit.md](decisions/2026-09-06_pr-4_audit.md) -- historical audit of Stop-hook implementation; stale for app-owned polling revision
+- [2026-09-06_pr-4_polling_audit.md](decisions/2026-09-06_pr-4_polling_audit.md) -- renewed six-role audit, 108 tests, coverage limits, installed polling/value checks, and remaining low findings
 
 **Last updated**: 2026-09-06

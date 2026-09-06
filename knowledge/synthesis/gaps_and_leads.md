@@ -1,6 +1,10 @@
 # Gaps and leads
 
 ## Open
+- Codex user monitoring remains active before merge; automated refresh and
+  matching account values are verified in the
+  [renewed polling audit](../decisions/2026-09-06_pr-4_polling_audit.md).
+  [PRAudit:2]
 - `schema_version` is written but never inspected on read, and there is no
   migration hook; becomes a P3 debt issue at the first `currentSchemaVersion`
   bump.
@@ -9,8 +13,8 @@
 - 2026-09-05: whether `rate_limits` arrives at all. Yes; see
   [the merge rule](../decisions/2026-09-05_snapshot-merge-rule.md) for
   the cross-session wrinkle the probe exposed.
-- 2026-09-06: Codex as a second provider. It now uses the authenticated Codex
-  App Server through a bounded asynchronous hook; see the
+- 2026-09-06: Codex as a second provider. The authenticated Codex App Server
+  remains the usage source; Stop-hook scheduling is superseded. See the
   [Codex source decision](../decisions/2026-09-06_codex-app-server-snapshot.md).
 
 ## Leads

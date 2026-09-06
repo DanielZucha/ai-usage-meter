@@ -1,5 +1,10 @@
 # Decision: Codex usage comes from its authenticated App Server process
 
+**Status**: App Server source retained; the Stop-hook scheduling and freshness
+policy below is SUPERSEDED by
+[app-owned polling](2026-09-06_codex-app-owned-polling.md). The original decision
+is preserved as history. [ADR:codex-polling]
+
 ## What was decided
 
 The Codex meter launches the user's configured Codex executable as a

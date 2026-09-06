@@ -1,5 +1,9 @@
 # Decision: app refresh cadence and display rules
 
+For Codex, the snapshot-only refresh policy below is superseded by
+[app-owned polling](2026-09-06_codex-app-owned-polling.md). Claude's snapshot
+reader and the shared display rules remain in force. [ADR:codex-polling]
+
 ## What was decided
 - Refresh: a 30-second timer re-reads the snapshot and recomputes the
   countdown. No file-system watcher.
