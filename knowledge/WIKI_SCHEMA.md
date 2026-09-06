@@ -15,7 +15,7 @@
 
 <!-- One paragraph: what this project investigates or builds, and what the
      wiki is for. Keep it short — CLAUDE.md carries the full overview. -->
-**Wiki purpose**: Records why the meter is shaped the way it is: data-source choices, the credential-free rule, the snapshot contract, and the sharp edges of the Claude usage surfaces.
+**Wiki purpose**: Records why the meter is shaped the way it is: provider data-source choices, the credential-free rule, the snapshot contract, and the sharp edges of the Claude and Codex usage surfaces.
 
 ## Entity types in use
 
@@ -51,4 +51,4 @@
      [PR:NNN], [Issue:NNN]) are available by default. Declare any additional
      tags here. -->
 
-**Last updated**: 2026-09-05
+**Last updated**: 2026-09-06

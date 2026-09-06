@@ -16,6 +16,7 @@ DIST       = dist
 APP        = $(DIST)/$(APP_NAME).app
 APP_DEST   = $(HOME)/Applications/$(APP_NAME).app
 HOOK_DEST  = $(HOME)/.local/bin/ai-usage-meter-hook
+CODEX_HOOK_DEST = $(HOME)/.local/bin/ai-usage-meter-codex-hook
 SNAPSHOT   = $(HOME)/Library/Application Support/ai-usage-meter
 
 .PHONY: build test bundle install uninstall run clean snippet
@@ -39,6 +40,9 @@ install: bundle
 	cp "$(BUILD_DIR)/ai-usage-meter-hook" "$(HOOK_DEST).new"
 	chmod 755 "$(HOOK_DEST).new"
 	mv -f "$(HOOK_DEST).new" "$(HOOK_DEST)"
+	cp "$(BUILD_DIR)/ai-usage-meter-codex-hook" "$(CODEX_HOOK_DEST).new"
+	chmod 755 "$(CODEX_HOOK_DEST).new"
+	mv -f "$(CODEX_HOOK_DEST).new" "$(CODEX_HOOK_DEST)"
 	-osascript -e 'tell application "AI Usage Meter" to quit' >/dev/null 2>&1
 	@for i in 1 2 3 4 5 6; do pgrep -x "AIUsageMeter" >/dev/null 2>&1 || break; sleep 0.5; done
 	rm -rf "$(APP_DEST).new"
@@ -57,12 +61,47 @@ snippet:
 	@echo '    "command": "$(HOOK_DEST)"'
 	@echo '  }'
 	@echo ""
+	@codex_bin="$$(command -v codex 2>/dev/null || true)"; \
+	if [ -z "$$codex_bin" ]; then \
+		echo "Codex CLI not found on PATH; rerun 'make snippet' from a shell where codex is available."; \
+		exit 0; \
+	fi; \
+	codex_bin="$$(realpath "$$codex_bin")"; \
+	hook_dest="$$HOME/.local/bin/ai-usage-meter-codex-hook"; \
+	for path in "$$hook_dest" "$$codex_bin"; do \
+		case "$$path" in *\'*|*\"*|*\\*) \
+			echo "Cannot render Codex hook JSON: executable paths cannot contain quotes or backslashes."; \
+			exit 1;; \
+		esac; \
+		if printf '%s' "$$path" | LC_ALL=C grep -q '[[:cntrl:]]'; then \
+			echo "Cannot render Codex hook JSON: executable paths cannot contain control characters."; \
+			exit 1; \
+		fi; \
+	done; \
+	echo "Merge this entry into the Stop array in ~/.codex/hooks.json:"; \
+	echo ""; \
+	echo '        {'; \
+	echo '          "hooks": ['; \
+	echo '            {'; \
+	echo '              "type": "command",'; \
+	printf '              "command": "'\''%s'\'' --codex-bin '\''%s'\''",\n' "$$hook_dest" "$$codex_bin"; \
+	echo '              "async": true,'; \
+	echo '              "timeout": 15'; \
+	echo '            }'; \
+	echo '          ]'; \
+	echo '        }'; \
+	echo ""; \
+	echo "Add this native Codex footer configuration to ~/.codex/config.toml:"; \
+	echo ""; \
+	echo '[tui]'; \
+	echo 'status_line = ["model-with-reasoning", "context-remaining"]'; \
+	echo ""
 
 uninstall:
 	-osascript -e 'tell application "AI Usage Meter" to quit' >/dev/null 2>&1
 	rm -rf "$(APP_DEST)"
-	rm -f "$(HOOK_DEST)"
-	@echo "Removed the app and the hook. Remove the statusLine entry from ~/.claude/settings.json by hand."
+	rm -f "$(HOOK_DEST)" "$(CODEX_HOOK_DEST)"
+	@echo "Removed the app and both hooks. Remove their Claude/Codex configuration entries by hand."
 	@echo "Snapshot left in place: $(SNAPSHOT)"
 
 run: build

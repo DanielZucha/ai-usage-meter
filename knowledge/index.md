@@ -3,14 +3,16 @@
 <!-- Generated 2026-09-05 during the founding grill session -->
 
 ## Now
-- Phase: v0.1.0 released; PR #1 merged to devel, PR #2 to main, tag v0.1.0 on main, devel synced (as of 2026-09-05)
-- Active: watch whether the 30 s cadence and the 75/90 rules feel right; hook wired into settings.json on 2026-09-05 and reporting live (as of 2026-09-05)
-- Next: live with it; act on the gaps_and_leads triggers if one fires (resets_at unit, per-model window, schema bump) (as of 2026-09-05)
-- Deferred: threshold notifications; Codex as a second provider (see synthesis/gaps_and_leads.md) (as of 2026-09-05)
+- Phase: Codex counterpart implemented on feature/codex-meter after v0.1.0 was merged into devel (as of 2026-09-06)
+- Active: visually validate the weekly-only Codex menu item and async-hook freshness in daily use (as of 2026-09-06)
+- Next: review and merge the Codex counterpart, then apply the printed Codex hook/TUI snippets (as of 2026-09-06)
+- Deferred: threshold notifications (as of 2026-09-06)
 - Known: per-model weekly usage (the /usage Fable row) is not in the statusline payload; the builder emits five_hour, seven_day, spend_limit only, and the Fable row comes from the usage API the meter never calls (probe 2, S3) (as of 2026-09-05)
 
 ## Sources
 - [source_registry.md](sources/source_registry.md) -- registry of immutable inputs
+- [2026-09-06_codex-data-source.md](../docs/2026-09-06_codex-data-source.md) -- verified Codex App Server, hook, signage, and glyph findings
+- [2026-09-06_codex-pro-weekly-limit.md](../docs/2026-09-06_codex-pro-weekly-limit.md) -- live Pro refresh and approved weekly-only correction
 
 ## Entities
 
@@ -32,5 +34,7 @@
 - [2026-09-05_snapshot-merge-rule.md](decisions/2026-09-05_snapshot-merge-rule.md) -- every session writes; same window keeps the max, later reset replaces, epoch converted to ISO
 - [2026-09-05_glyph-embedded-svg-string.md](decisions/2026-09-05_glyph-embedded-svg-string.md) -- glyph travels as a Swift string constant, byte-identical to assets/claude.svg; no resource bundle
 - [2026-09-05_pr-1_audit.md](decisions/2026-09-05_pr-1_audit.md) -- v1 merges as audited; hollow rate_limits no longer refreshes captured_at; low notes recorded, not ticketed
+- [2026-09-06_codex-app-server-snapshot.md](decisions/2026-09-06_codex-app-server-snapshot.md) -- authenticated App Server usage writer, async Stop hook, native Codex footer, exact provider glyph
+- [2026-09-06_codex-pro-weekly-only.md](decisions/2026-09-06_codex-pro-weekly-only.md) -- Codex Pro decodes and renders only its 7-day window; Claude remains unchanged
 
-**Last updated**: 2026-09-05
+**Last updated**: 2026-09-06

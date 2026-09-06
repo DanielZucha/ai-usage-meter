@@ -20,8 +20,9 @@ struct MeterMenu: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            WindowRow(window: display.fiveHour)
-            WindowRow(window: display.sevenDay)
+            ForEach(display.visibleWindows.indices, id: \.self) { index in
+                WindowRow(window: display.visibleWindows[index])
+            }
             Divider()
             Text(display.ageText)
                 .foregroundStyle(.secondary)

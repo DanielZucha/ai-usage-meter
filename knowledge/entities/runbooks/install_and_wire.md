@@ -1,30 +1,70 @@
 # Runbook: install and wire the meter
 
+## Requirements
+
+- macOS 14 or later and Swift 6 from the Command Line Tools.
+- Claude Code for the Claude meter.
+- For the Codex meter, an authenticated Codex CLI with an active subscription
+  and App Server rate-limit support. `codex` must be on `PATH` while rendering
+  the configuration snippet.
+
 ## Steps
-1. `make test` must pass.
-2. `make install` builds, bundles, installs to `~/Applications`, copies
-   the hook to `~/.local/bin/ai-usage-meter-hook`, launches the app, and
-   prints the settings snippet.
-3. Paste the printed `statusLine` object into `~/.claude/settings.json`
-   by hand. The installer never edits that file by
-   [decision](../../decisions/2026-09-05_hook-is-a-swift-target.md).
-4. Send one prompt in any Claude Code session. Every running session picks
-   the new statusline up immediately and the snapshot appears within the
-   same second; the menu bar updates on its next 30-second tick.
+
+1. `make test` must pass. Do not use bare `swift test`.
+2. Run `make install`. It builds and launches the app and installs both hooks:
+   `~/.local/bin/ai-usage-meter-hook` and
+   `~/.local/bin/ai-usage-meter-codex-hook`.
+3. Run `make snippet` if the install output is no longer visible.
+4. Paste the printed Claude `statusLine` object into
+   `~/.claude/settings.json` by hand.
+5. Merge the printed asynchronous `Stop` hook entry into the `Stop` array in
+   `~/.codex/hooks.json`. Keep the absolute hook and Codex executable paths
+   printed by the command.
+6. Add the printed native footer configuration to `~/.codex/config.toml`:
+
+       [tui]
+       status_line = ["model-with-reasoning", "context-remaining"]
+
+The installer never edits any of these files, consistent with the
+[hook decision](../../decisions/2026-09-05_hook-is-a-swift-target.md).
 
 ## Checks
+
+- Send one prompt in Claude Code. The CLI status line shows
+  `<model> · <effort> · ⛁ <n>%` (effort is omitted when unavailable),
+  `snapshot.json` contains `providers.claude`, and its menu-bar item follows
+  on the next 30-second refresh.
+- Complete one Codex turn. Its native footer shows model plus reasoning and
+  remaining context, and the asynchronous hook adds `providers.codex` on a
+  best-effort basis. The Codex menu-bar item follows on the next refresh with
+  one 7-day percentage and one 7-day panel row.
 - `cat "$HOME/Library/Application Support/ai-usage-meter/snapshot.json"`
-  shows `providers.claude` with two windows and ISO-8601 dates.
-- The terminal status bar shows `<model> · <effort> · ⛁ <n>%`; the menu
-  bar follows within 30 seconds.
+  shows available provider windows with ISO-8601 dates.
+- Both menu-bar items use the same color rules: numbers become bold at 75
+  percent, and the full provider label flips to black on white at 90 percent.
+  Claude displays its 5-hour and 7-day windows; Codex Pro displays only 7-day.
 - Login Items lists "AI Usage Meter".
-- The 7-day number equals the `/usage` row "Current week (all models)", not
-  the per-model row.
+- The Claude 7-day number equals the `/usage` row "Current week (all models)",
+  not the per-model row.
+
+The Codex `Stop` hook is asynchronous. Its snapshot can lag, complete out of
+turn order, or be interrupted when a session exits; use the age displayed in
+the provider panel when assessing freshness.
+
+## Credential check
+
+The app and hooks must not read or log API keys, OAuth tokens, Codex
+`auth.json`, Keychain values, or Codex hook stdin. Codex usage is obtained by
+launching the user's authenticated Codex CLI as an App Server over stdio.
 
 ## Undo
-- `make uninstall`, then remove the `statusLine` entry from settings.json.
+
+- Run `make uninstall`.
+- Remove the Claude `statusLine` entry, the Codex `Stop` hook entry, and the
+  Codex `[tui]` status-line fields by hand. The snapshot remains on disk.
 
 ## Toolchain traps
+
 1. Two `*.private.swiftinterface` files from a 2024 Command Line Tools
    release survived every later update inside
    `/Library/Developer/CommandLineTools/usr/lib/swift/pm/ManifestAPI/PackageDescription.swiftmodule/`.
@@ -43,6 +83,8 @@
    `-Xswiftc -F` plus two `-Xlinker -rpath` flags and is the only supported
    way to run the tests here. Standing since 2026-09-05.
 
-Related: [snapshot contract](../../decisions/2026-09-05_snapshot-contract.md)
+Related: [snapshot contract](../../decisions/2026-09-05_snapshot-contract.md),
+[display rules](../../decisions/2026-09-05_app-refresh-and-display-rules.md),
+[Codex weekly-only decision](../../decisions/2026-09-06_codex-pro-weekly-only.md)
 
-**Last updated**: 2026-09-05
+**Last updated**: 2026-09-06

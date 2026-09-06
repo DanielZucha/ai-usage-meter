@@ -10,9 +10,16 @@ struct MeterApp: App {
 
     var body: some Scene {
         MenuBarExtra {
-            MeterMenu(display: model.display)
+            MeterMenu(display: model.claudeDisplay)
         } label: {
-            MeterLabel(image: model.labelImage)
+            MeterLabel(image: model.claudeLabelImage)
+        }
+        .menuBarExtraStyle(.window)
+
+        MenuBarExtra {
+            MeterMenu(display: model.codexDisplay)
+        } label: {
+            MeterLabel(image: model.codexLabelImage)
         }
         .menuBarExtraStyle(.window)
     }

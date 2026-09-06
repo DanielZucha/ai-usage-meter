@@ -42,6 +42,7 @@ public struct ProviderUsage: Codable, Equatable, Sendable {
 public struct Snapshot: Codable, Equatable, Sendable {
     public static let currentSchemaVersion = 1
     public static let claudeProviderID = "claude"
+    public static let codexProviderID = "codex"
 
     public var schemaVersion: Int
     public var providers: [String: ProviderUsage]

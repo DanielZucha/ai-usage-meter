@@ -53,3 +53,21 @@
 - source: PR #1 (devel, merge 27bc05d), PR #2 (main, merge 3d3c9e6), tag v0.1.0
 - pages touched: index.md (Now block)
 - notes: first release; no code change since the audit
+
+## [2026-09-06] ingest | Codex counterpart source findings
+- source: S4: docs/2026-09-06_codex-data-source.md
+- pages touched: decisions/2026-09-06_codex-app-server-snapshot.md, entities/runbooks/install_and_wire.md, synthesis/gaps_and_leads.md, sources/source_registry.md, WIKI_SCHEMA.md, index.md
+- notes: Codex usage comes from its authenticated App Server via a bounded async Stop hook; native TUI fields provide model, effort, and context signage
+
+## [2026-09-06] lint
+- contradictions: none
+- stale claims: none
+- orphan pages: none
+- missing cross-refs: WIKI_SCHEMA.md and sources/source_registry.md have no outbound wiki links (utility-page warning only)
+- now-block: fresh
+- claude-md: unmigrated (project has a 50-line CLAUDE.md but no project AGENTS.md); its goal and architecture pointers still describe the Claude-only v1 surface
+
+## [2026-09-06] ingest | Codex Pro weekly-only correction
+- source: S5: docs/2026-09-06_codex-pro-weekly-limit.md
+- pages touched: decisions/2026-09-06_codex-pro-weekly-only.md, decisions/2026-09-06_codex-app-server-snapshot.md, entities/runbooks/install_and_wire.md, sources/source_registry.md, index.md
+- notes: Codex Pro now decodes and renders only its 7-day limit; Claude retains its 5-hour and 7-day windows
