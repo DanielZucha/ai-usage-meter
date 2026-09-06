@@ -10,9 +10,24 @@ struct MeterApp: App {
 
     var body: some Scene {
         MenuBarExtra {
-            MeterMenu(display: model.display)
+            MeterMenu(display: model.claudeDisplay)
         } label: {
-            MeterLabel(image: model.labelImage)
+            MeterLabel(
+                image: model.claudeLabelImage,
+                accessibilityLabel: model.claudeDisplay.accessibilityLabel,
+                accessibilityValue: model.claudeDisplay.accessibilityValue
+            )
+        }
+        .menuBarExtraStyle(.window)
+
+        MenuBarExtra {
+            MeterMenu(display: model.codexDisplay, refreshUnavailable: model.codexRefreshUnavailable)
+        } label: {
+            MeterLabel(
+                image: model.codexLabelImage,
+                accessibilityLabel: model.codexDisplay.accessibilityLabel,
+                accessibilityValue: model.codexDisplay.accessibilityValue
+            )
         }
         .menuBarExtraStyle(.window)
     }

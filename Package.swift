@@ -14,5 +14,6 @@ let package = Package(
         .executableTarget(name: "MeterHook", dependencies: ["MeterCore"]),
         .executableTarget(name: "AIUsageMeter", dependencies: ["MeterCore"]),
         .testTarget(name: "MeterCoreTests", dependencies: ["MeterCore"]),
+        .testTarget(name: "AIUsageMeterTests", dependencies: ["AIUsageMeter", "MeterCore"]),
     ]
 )

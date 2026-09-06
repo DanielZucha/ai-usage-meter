@@ -64,12 +64,10 @@ public struct SnapshotStore: Sendable {
     ///
     /// Acquisition is bounded, not blocking: it polls a non-blocking
     /// `flock` up to `lockTimeout`, sleeping `lockRetryInterval` between
-    /// attempts. The hook runs inside Claude Code's render loop and must
-    /// never stall indefinitely, so if the lock is still held when the
-    /// bound expires, `body` runs anyway without it (best effort, no
-    /// throw, no output). That is safe: `write(_:)` is still atomic via
-    /// `rename(2)`, and the merge this guards is monotone, so a lost
-    /// update is repaired by the next hook invocation.
+    /// attempts. The hook must never stall indefinitely, so a timeout
+    /// throws and leaves the snapshot untouched. The body must not run
+    /// unlocked: independent provider writers could otherwise replace the
+    /// whole snapshot from stale reads and erase each other's keys.
     public func withExclusiveLock<T>(_ body: () throws -> T) throws -> T {
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
         let lockPath = directory.appendingPathComponent(Self.lockFileName).path
@@ -90,7 +88,8 @@ public struct SnapshotStore: Sendable {
             usleep(useconds_t(Self.lockRetryInterval * 1_000_000))
         } while Date() < deadline
 
-        defer { if acquired { flock(descriptor, LOCK_UN) } }
+        guard acquired else { throw POSIXError(.ETIMEDOUT) }
+        defer { flock(descriptor, LOCK_UN) }
         return try body()
     }
 }

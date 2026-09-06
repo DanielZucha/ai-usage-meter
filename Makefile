@@ -16,7 +16,9 @@ DIST       = dist
 APP        = $(DIST)/$(APP_NAME).app
 APP_DEST   = $(HOME)/Applications/$(APP_NAME).app
 HOOK_DEST  = $(HOME)/.local/bin/ai-usage-meter-hook
+CODEX_HOOK_DEST = $(HOME)/.local/bin/ai-usage-meter-codex-hook
 SNAPSHOT   = $(HOME)/Library/Application Support/ai-usage-meter
+export CODEX_HOOK_DEST SNAPSHOT
 
 .PHONY: build test bundle install uninstall run clean snippet
 
@@ -25,6 +27,7 @@ build:
 
 test:
 	swift test $(TEST_FLAGS) $(if $(FILTER),--filter $(FILTER),)
+	sh Tests/SnippetTests.sh
 
 bundle: build
 	rm -rf "$(APP)"
@@ -39,6 +42,7 @@ install: bundle
 	cp "$(BUILD_DIR)/ai-usage-meter-hook" "$(HOOK_DEST).new"
 	chmod 755 "$(HOOK_DEST).new"
 	mv -f "$(HOOK_DEST).new" "$(HOOK_DEST)"
+	sh packaging/install-codex-launcher.sh
 	-osascript -e 'tell application "AI Usage Meter" to quit' >/dev/null 2>&1
 	@for i in 1 2 3 4 5 6; do pgrep -x "AIUsageMeter" >/dev/null 2>&1 || break; sleep 0.5; done
 	rm -rf "$(APP_DEST).new"
@@ -57,12 +61,16 @@ snippet:
 	@echo '    "command": "$(HOOK_DEST)"'
 	@echo '  }'
 	@echo ""
+	@echo "Codex usage refreshes automatically in the app every 30 seconds."
+	@echo "Add this native Codex footer configuration to ~/.codex/config.toml:"
+	@echo '[tui]'
+	@echo 'status_line = ["model-with-reasoning", "context-remaining"]'
 
 uninstall:
 	-osascript -e 'tell application "AI Usage Meter" to quit' >/dev/null 2>&1
 	rm -rf "$(APP_DEST)"
-	rm -f "$(HOOK_DEST)"
-	@echo "Removed the app and the hook. Remove the statusLine entry from ~/.claude/settings.json by hand."
+	rm -f "$(HOOK_DEST)" "$$CODEX_HOOK_DEST" "$$SNAPSHOT/codex-launcher"
+	@echo "Removed the app, launcher configuration, and hook executables. Remove old configuration entries by hand."
 	@echo "Snapshot left in place: $(SNAPSHOT)"
 
 run: build

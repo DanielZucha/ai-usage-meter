@@ -1,7 +1,7 @@
 import AppKit
 import MeterCore
 
-/// Draws the whole menu-bar label (glyph, gap, two numbers) as one image.
+/// Draws the whole menu-bar label (glyph, gap, usage numbers) as one image.
 /// Normal state: black content marked as a template, so the bar tints it.
 /// Flipped state: a white rounded background at half alpha with black
 /// glyph and text, not a template, so the colors survive.
@@ -14,20 +14,23 @@ enum LabelImage {
     static let cornerRadius: CGFloat = 6
     static let flippedBackgroundAlpha: CGFloat = 0.5
 
-    static let glyph: NSImage = {
+    static let claudeGlyph = decodeGlyph(svg: ClaudeGlyph.svg, providerName: "Claude")
+    static let codexGlyph = decodeGlyph(svg: CodexGlyph.svg, providerName: "Codex")
+
+    static func decodeGlyph(svg: String, providerName: String) -> NSImage {
         let image: NSImage
-        if let decoded = NSImage(data: Data(ClaudeGlyph.svg.utf8)) {
+        if let decoded = NSImage(data: Data(svg.utf8)) {
             image = decoded
         } else {
-            NSLog("LabelImage: failed to decode the embedded glyph SVG; falling back to a system symbol")
+            NSLog("LabelImage: failed to decode the embedded %@ glyph SVG", providerName)
             image = NSImage(systemSymbolName: "questionmark.circle", accessibilityDescription: nil)
                 ?? NSImage(size: .zero)
         }
         image.size = NSSize(width: glyphSize, height: glyphSize)
         return image
-    }()
+    }
 
-    static func make(_ display: MeterDisplay) -> NSImage {
+    static func make(_ display: MeterDisplay, glyph: NSImage) -> NSImage {
         let text = attributedText(display)
         let textSize = text.size()
         let width = horizontalPadding + glyphSize + gap + ceil(textSize.width) + horizontalPadding
@@ -50,9 +53,15 @@ enum LabelImage {
 
     static func attributedText(_ display: MeterDisplay) -> NSAttributedString {
         let result = NSMutableAttributedString()
-        result.append(number(display.fiveHour))
-        result.append(NSAttributedString(string: MeterDisplay.separator, attributes: attributes(bold: false)))
-        result.append(number(display.sevenDay))
+        for (index, window) in display.visibleWindows.enumerated() {
+            if index > 0 {
+                result.append(NSAttributedString(
+                    string: MeterDisplay.separator,
+                    attributes: attributes(bold: false)
+                ))
+            }
+            result.append(number(window))
+        }
         return result
     }
 

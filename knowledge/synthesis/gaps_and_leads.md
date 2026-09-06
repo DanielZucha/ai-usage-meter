@@ -1,6 +1,10 @@
 # Gaps and leads
 
 ## Open
+- Codex user monitoring remains active before merge; automated refresh and
+  matching account values are verified in the
+  [renewed polling audit](../decisions/2026-09-06_pr-4_polling_audit.md).
+  [PRAudit:2]
 - `schema_version` is written but never inspected on read, and there is no
   migration hook; becomes a P3 debt issue at the first `currentSchemaVersion`
   bump.
@@ -9,12 +13,13 @@
 - 2026-09-05: whether `rate_limits` arrives at all. Yes; see
   [the merge rule](../decisions/2026-09-05_snapshot-merge-rule.md) for
   the cross-session wrinkle the probe exposed.
+- 2026-09-06: Codex as a second provider. The authenticated Codex App Server
+  remains the usage source; Stop-hook scheduling is superseded. See the
+  [Codex source decision](../decisions/2026-09-06_codex-app-server-snapshot.md).
 
 ## Leads
 - Notifications at thresholds were deferred, not rejected. Trigger: a
   limit surprises Daniel in use.
-- A second provider (Codex) would be an additional writer into the same
-  provider-keyed snapshot. Nothing in version one should assume one provider.
 - Exact-multiple countdown boundaries are untested (e.g. remaining time
   landing precisely on a day, hour, or minute mark). No trigger yet.
 - No test exercises the lock being released when `body` throws inside
@@ -32,4 +37,4 @@
 
 Related: [data-source decision](../decisions/2026-09-05_data-source-statusline-snapshot.md)
 
-**Last updated**: 2026-09-05
+**Last updated**: 2026-09-06

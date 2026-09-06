@@ -23,21 +23,32 @@ public struct MeterDisplay: Equatable, Sendable {
 
     public var fiveHour: WindowDisplay
     public var sevenDay: WindowDisplay
-    /// True when either window is at `flipThreshold` or more: the label
+    /// Windows rendered for this provider, in menu-bar and panel order.
+    public var visibleWindows: [WindowDisplay]
+    public var accessibilityLabel: String
+    public var accessibilityValue: String
+    /// True when any visible window is at `flipThreshold` or more: the label
     /// inverts (white background, black glyph and text).
     public var isFlipped: Bool
     public var ageText: String
 
-    public static func make(snapshot: Snapshot?, now: Date) -> MeterDisplay {
-        let usage = snapshot?.claude
+    public static func make(snapshot: Snapshot?, providerID: String, now: Date) -> MeterDisplay {
+        let usage = snapshot?.providers[providerID]
         let fiveHour = window(named: "5-hour", usage?.fiveHour, now: now)
         let sevenDay = window(named: "7-day", usage?.sevenDay, now: now)
-        let flipped = [fiveHour, sevenDay].contains { ($0.percent ?? 0) >= flipThreshold }
+        let visibleWindows = providerID == Snapshot.codexProviderID
+            ? [sevenDay]
+            : [fiveHour, sevenDay]
+        let providerName = providerID == Snapshot.codexProviderID ? "Codex" : "Claude"
+        let flipped = visibleWindows.contains { ($0.percent ?? 0) >= flipThreshold }
         let age = usage.map { "Updated \(Countdown.age(since: $0.capturedAt, now: now)) · \($0.source)" }
             ?? noSnapshotText
         return MeterDisplay(
             fiveHour: fiveHour,
             sevenDay: sevenDay,
+            visibleWindows: visibleWindows,
+            accessibilityLabel: "\(providerName) usage",
+            accessibilityValue: visibleWindows.map(\.rowText).joined(separator: ", "),
             isFlipped: flipped,
             ageText: age
         )

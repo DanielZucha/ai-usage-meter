@@ -14,11 +14,16 @@ public enum SnapshotMerge {
     }
 
     public static func merge(existing: ProviderUsage?, incoming: ProviderUsage) -> ProviderUsage {
-        ProviderUsage(
+        let metadata = if let existing, existing.capturedAt > incoming.capturedAt {
+            (capturedAt: existing.capturedAt, source: existing.source)
+        } else {
+            (capturedAt: incoming.capturedAt, source: incoming.source)
+        }
+        return ProviderUsage(
             fiveHour: mergeWindow(existing: existing?.fiveHour, incoming: incoming.fiveHour),
             sevenDay: mergeWindow(existing: existing?.sevenDay, incoming: incoming.sevenDay),
-            capturedAt: incoming.capturedAt,
-            source: incoming.source
+            capturedAt: metadata.capturedAt,
+            source: metadata.source
         )
     }
 

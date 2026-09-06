@@ -63,7 +63,7 @@ import Testing
         #expect(FileManager.default.fileExists(atPath: lockPath))
     }
 
-    @Test func exclusiveLockGivesUpAfterTheBoundAndRunsAnyway() throws {
+    @Test func exclusiveLockTimeoutDoesNotRunTheBody() throws {
         let store = try temporaryStore()
         try FileManager.default.createDirectory(at: store.fileURL.deletingLastPathComponent(), withIntermediateDirectories: true)
         let lockPath = store.fileURL.deletingLastPathComponent().appendingPathComponent("snapshot.lock").path
@@ -77,10 +77,12 @@ import Testing
 
         var ran = false
         let start = Date()
-        try store.withExclusiveLock { ran = true }
+        #expect(throws: (any Error).self) {
+            try store.withExclusiveLock { ran = true }
+        }
         let elapsed = Date().timeIntervalSince(start)
 
-        #expect(ran)
+        #expect(!ran)
         #expect(elapsed >= SnapshotStore.lockTimeout)
         #expect(elapsed < 1)
     }

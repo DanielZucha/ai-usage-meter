@@ -52,6 +52,29 @@ import Testing
         #expect(merged.capturedAt == later)
     }
 
+    @Test func providerMergeDoesNotRegressCaptureMetadata() {
+        let later = Fixtures.captured.addingTimeInterval(60)
+        let existing = ProviderUsage(
+            fiveHour: UsageWindow(usedPercentage: 21, resetsAt: reset),
+            sevenDay: nil,
+            capturedAt: later,
+            source: "newer-source"
+        )
+        let stale = ProviderUsage(
+            fiveHour: UsageWindow(usedPercentage: 12, resetsAt: reset),
+            sevenDay: UsageWindow(usedPercentage: 4, resetsAt: Fixtures.sevenReset),
+            capturedAt: Fixtures.captured,
+            source: "stale-source"
+        )
+
+        let merged = SnapshotMerge.merge(existing: existing, incoming: stale)
+
+        #expect(merged.fiveHour?.usedPercentage == 21)
+        #expect(merged.sevenDay?.usedPercentage == 4)
+        #expect(merged.capturedAt == later)
+        #expect(merged.source == "newer-source")
+    }
+
     @Test func snapshotMergeCreatesTheDocumentWhenMissing() {
         let incoming = ProviderUsage(
             fiveHour: UsageWindow(usedPercentage: 21, resetsAt: reset),

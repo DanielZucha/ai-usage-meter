@@ -1,5 +1,11 @@
 # Decision: the hook merges, it does not overwrite
 
+**Scope**: Claude status-line input only. Successful serialized Codex account
+reads replace their provider entry under the
+[app-owned polling decision](2026-09-06_codex-app-owned-polling.md). A one-second
+reset correction in a live Codex response showed that this Claude rule can
+reject current account data while renewing its timestamp. [ADR:codex-polling]
+
 ## What was decided
 The hook reads the existing snapshot before writing. For each window of
 the incoming provider payload it compares `resets_at` with the stored
@@ -41,4 +47,4 @@ window and legitimately restarts from a low number.
 Related: [snapshot contract](2026-09-05_snapshot-contract.md),
 [hook target](2026-09-05_hook-is-a-swift-target.md)
 
-**Last updated**: 2026-09-05
+**Last updated**: 2026-09-06
