@@ -79,3 +79,8 @@
 - missing cross-refs: none
 - now-block: fresh (visual styling is approved; async-hook freshness remains active until the Stop hook is wired)
 - claude-md: compliant (44-line static AGENTS.md; CLAUDE.md delegates to it)
+
+## [2026-09-06] ingest | PR 4 audit verdict
+- source: six-role audit of commits b5836ee and 234c0e2
+- pages touched: decisions/2026-09-06_pr-4_audit.md, index.md
+- notes: all merge criteria pass after accessibility, stable-launcher, shell-injection, project-orientation, and hook-trust fixes; 100 Swift tests plus the snippet integration test pass

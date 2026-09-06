@@ -3,9 +3,9 @@
 <!-- Generated 2026-09-05 during the founding grill session -->
 
 ## Now
-- Phase: Codex counterpart implemented on feature/codex-meter after v0.1.0 was merged into devel (as of 2026-09-06)
-- Active: visually validate the weekly-only Codex menu item and async-hook freshness in daily use (as of 2026-09-06)
-- Next: review and merge the Codex counterpart, then apply the printed Codex hook/TUI snippets (as of 2026-09-06)
+- Phase: Codex counterpart audited and proposed to devel as PR 4 (as of 2026-09-06)
+- Active: review PR 4 and wire the printed Codex Stop hook through `/hooks` (as of 2026-09-06)
+- Next: merge PR 4 after cloud review, then verify live per-turn Codex freshness (as of 2026-09-06)
 - Deferred: threshold notifications (as of 2026-09-06)
 - Known: per-model weekly usage (the /usage Fable row) is not in the statusline payload; the builder emits five_hour, seven_day, spend_limit only, and the Fable row comes from the usage API the meter never calls (probe 2, S3) (as of 2026-09-05)
 
@@ -36,5 +36,6 @@
 - [2026-09-05_pr-1_audit.md](decisions/2026-09-05_pr-1_audit.md) -- v1 merges as audited; hollow rate_limits no longer refreshes captured_at; low notes recorded, not ticketed
 - [2026-09-06_codex-app-server-snapshot.md](decisions/2026-09-06_codex-app-server-snapshot.md) -- authenticated App Server usage writer, async Stop hook, native Codex footer, exact provider glyph
 - [2026-09-06_codex-pro-weekly-only.md](decisions/2026-09-06_codex-pro-weekly-only.md) -- Codex Pro decodes and renders only its 7-day window; Claude remains unchanged
+- [2026-09-06_pr-4_audit.md](decisions/2026-09-06_pr-4_audit.md) -- Codex counterpart passed the six-role audit after accessibility, launcher, injection, and hook-trust fixes
 
 **Last updated**: 2026-09-06
