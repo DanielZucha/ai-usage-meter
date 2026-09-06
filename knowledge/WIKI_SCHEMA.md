@@ -14,7 +14,7 @@
 **Flavor**: tooling
 
 <!-- One paragraph: what this project investigates or builds, and what the
-     wiki is for. Keep it short — CLAUDE.md carries the full overview. -->
+     wiki is for. Keep it short — AGENTS.md carries the full overview. -->
 **Wiki purpose**: Records why the meter is shaped the way it is: provider data-source choices, the credential-free rule, the snapshot contract, and the sharp edges of the Claude and Codex usage surfaces.
 
 ## Entity types in use
@@ -50,5 +50,7 @@
      [V##:section_N], [NB##:section_N], [PubMed:PMID], [F#], [ADR:NNN],
      [PR:NNN], [Issue:NNN]) are available by default. Declare any additional
      tags here. -->
+
+Related: [knowledge index](index.md)
 
 **Last updated**: 2026-09-06

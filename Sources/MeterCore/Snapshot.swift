@@ -52,8 +52,7 @@ public struct Snapshot: Codable, Equatable, Sendable {
         self.providers = providers
     }
 
-    /// Single-provider convenience for version one. When a second provider
-    /// lands, the display layer iterates `providers`; storage does not change.
+    /// Claude convenience accessor retained alongside the provider-keyed map.
     public var claude: ProviderUsage? {
         get { providers[Self.claudeProviderID] }
         set { providers[Self.claudeProviderID] = newValue }

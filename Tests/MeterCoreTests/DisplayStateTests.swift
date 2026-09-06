@@ -31,6 +31,8 @@ import Testing
         #expect(display.fiveHour.rowText == "5-hour  42% · resets in 2h 21m")
         #expect(display.sevenDay.rowText == "7-day  18% · resets in 6d 09h")
         #expect(display.visibleWindows == [display.fiveHour, display.sevenDay])
+        #expect(display.accessibilityLabel == "Claude usage")
+        #expect(display.accessibilityValue == "5-hour  42% · resets in 2h 21m, 7-day  18% · resets in 6d 09h")
         #expect(display.ageText == "Updated 2 min ago · statusline")
     }
 
@@ -139,6 +141,8 @@ import Testing
         #expect(display.sevenDay.isBold == false)
         #expect(display.visibleWindows == [display.sevenDay])
         #expect(display.visibleWindows.map(\.percentText) == ["63%"])
+        #expect(display.accessibilityLabel == "Codex usage")
+        #expect(display.accessibilityValue == "7-day  63% · resets in 6d 09h")
         #expect(display.isFlipped == false)
         #expect(display.ageText == "Updated just now · app-server")
     }

@@ -12,14 +12,22 @@ struct MeterApp: App {
         MenuBarExtra {
             MeterMenu(display: model.claudeDisplay)
         } label: {
-            MeterLabel(image: model.claudeLabelImage)
+            MeterLabel(
+                image: model.claudeLabelImage,
+                accessibilityLabel: model.claudeDisplay.accessibilityLabel,
+                accessibilityValue: model.claudeDisplay.accessibilityValue
+            )
         }
         .menuBarExtraStyle(.window)
 
         MenuBarExtra {
             MeterMenu(display: model.codexDisplay)
         } label: {
-            MeterLabel(image: model.codexLabelImage)
+            MeterLabel(
+                image: model.codexLabelImage,
+                accessibilityLabel: model.codexDisplay.accessibilityLabel,
+                accessibilityValue: model.codexDisplay.accessibilityValue
+            )
         }
         .menuBarExtraStyle(.window)
     }

@@ -54,15 +54,18 @@ Tests must run through `make test`, never bare `swift test`: the Command Line
 Tools' SwiftPM does not wire in swift-testing on its own, and the Makefile adds
 the required flags.
 
-`make install` builds and launches `AI Usage Meter.app`, installs
+`make install` builds and launches `AI Usage Meter.app`, registers it to launch
+at login, installs
 `~/.local/bin/ai-usage-meter-hook` and
-`~/.local/bin/ai-usage-meter-codex-hook`, and then runs `make snippet`. The
-snippet command prints three blocks for you to apply manually:
+`~/.local/bin/ai-usage-meter-codex-hook`, and then runs `make snippet`.
+When `codex` is available on `PATH`, the snippet command prints three blocks
+for you to apply manually; otherwise it prints the Claude block and explains
+how to rerun the command for Codex:
 
 1. The Claude `statusLine` entry for `~/.claude/settings.json`.
 2. A Codex asynchronous `Stop` hook entry to merge into
    `~/.codex/hooks.json`. The printed command pins the absolute paths of both
-   the installed hook and the detected Codex executable.
+   the installed hook and the stable Codex launcher.
 3. The native Codex footer configuration for `~/.codex/config.toml`:
 
        [tui]
@@ -73,7 +76,9 @@ The Codex footer uses Codex's native
 to show the CLI model, reasoning effort, and remaining context. The usage hook
 is a separate [Codex `Stop` hook](https://learn.chatgpt.com/docs/hooks).
 Neither `make install` nor `make snippet` edits Claude or Codex configuration.
-Run `make snippet` again whenever you need the current manual configuration.
+After adding the Codex hook, run `/hooks` inside Codex, review it, and mark it
+trusted. Codex skips unmanaged hooks until they are trusted. Run `make snippet`
+again whenever you need the current manual configuration.
 
 `make uninstall` removes the app and both installed hook executables. Remove
 their Claude and Codex configuration entries by hand; the snapshot is retained.

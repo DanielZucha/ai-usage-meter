@@ -5,9 +5,13 @@ import MeterCore
 /// What sits in the menu bar: the pre-rendered label image.
 struct MeterLabel: View {
     let image: NSImage
+    let accessibilityLabel: String
+    let accessibilityValue: String
 
     var body: some View {
         Image(nsImage: image)
+            .accessibilityLabel(Text(accessibilityLabel))
+            .accessibilityValue(Text(accessibilityValue))
     }
 }
 

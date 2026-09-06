@@ -3,7 +3,7 @@
 ## What was decided
 - Refresh: a 30-second timer re-reads the snapshot and recomputes the
   countdown. No file-system watcher.
-- Bar: `assets/claude.svg` (single path, 24x24 viewBox, currentColor),
+- Claude bar: `assets/claude.svg` (single path, 24x24 viewBox, currentColor),
   always filled, then the 5-hour and 7-day percentages, for example
   `42% · 18%`. The label is drawn as one `NSImage`: a template image in
   the normal state, an opaque-color image in the flipped state, since a
@@ -18,7 +18,9 @@
   no notifications.
 - Reset: once `resets_at` passes with no newer snapshot, that window shows
   zero. Absence before the first turn of a session leaves the previous
-  snapshot standing. No snapshot at all shows the glyph with two dashes.
+  snapshot standing. No Claude snapshot at all shows its glyph with two
+  dashes; provider-specific absence rendering follows each provider's visible
+  window set.
 - Both the meter and the Claude desktop app keep their asterisk; no
   variant glyph.
 
@@ -48,11 +50,12 @@ signal read as an unfilled icon rather than a state.
 - Per-model 7-day rows: impossible, only the undocumented endpoint has them.
 
 Related: [snapshot contract](2026-09-05_snapshot-contract.md),
-[host decision](2026-09-05_host-native-swift-menubarextra.md)
+[host decision](2026-09-05_host-native-swift-menubarextra.md), and
+[Codex weekly-only display](2026-09-06_codex-pro-weekly-only.md).
 
 ## History
 - 2026-09-05: thresholds 70/90 with outline-to-filled glyph superseded the
   same day by 75 bold / 90 flip, always-filled glyph, window-style dropdown
   with pill bars, after the first installed build.
 
-**Last updated**: 2026-09-05
+**Last updated**: 2026-09-06

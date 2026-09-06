@@ -31,6 +31,14 @@ unavailable responses leave the prior snapshot untouched. Because the hook is
 asynchronous, the UI exposes capture age and treats freshness as best effort.
 [S4:C3][S4:C6]
 
+## Evidence
+
+The App Server protocol, local authenticated probe, async-hook behavior,
+native TUI fields, glyph provenance, and bounded-client validation are captured
+in S4. The later weekly-only Pro correction is captured in S5 and changes only
+which subscription window is retained and displayed. [S4:C1][S4:C2][S4:C3]
+[S4:C4][S4:C5][S4:C6][S5:C1][S5:C2]
+
 ## Provider identity
 
 The Codex menu item uses the exact official IDE Blossom only beside Codex

@@ -12,7 +12,7 @@ public enum CodexRateLimitsClientError: Error, Equatable, Sendable {
 }
 
 /// Performs one bounded Codex App Server stdio exchange. Authentication stays
-/// inside the Codex process; this client sees only the rate-limit response.
+/// inside the Codex process; this client retains only the rate-limit response.
 public struct CodexRateLimitsClient: CodexUsageFetching, Sendable {
     public static let defaultTimeout: TimeInterval = 8
     public static let defaultOutputLimitBytes = 1_048_576

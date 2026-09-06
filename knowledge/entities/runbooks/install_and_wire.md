@@ -20,7 +20,9 @@
 5. Merge the printed asynchronous `Stop` hook entry into the `Stop` array in
    `~/.codex/hooks.json`. Keep the absolute hook and Codex executable paths
    printed by the command.
-6. Add the printed native footer configuration to `~/.codex/config.toml`:
+6. Start Codex, run `/hooks`, review the new hook, and mark it trusted. Codex
+   skips unmanaged hooks until this review is complete.
+7. Add the printed native footer configuration to `~/.codex/config.toml`:
 
        [tui]
        status_line = ["model-with-reasoning", "context-remaining"]
@@ -38,6 +40,9 @@ The installer never edits any of these files, consistent with the
   remaining context, and the asynchronous hook adds `providers.codex` on a
   best-effort basis. The Codex menu-bar item follows on the next refresh with
   one 7-day percentage and one 7-day panel row.
+- If the Codex age keeps increasing, run `/hooks` and verify the `Stop` hook is
+  present, enabled, and trusted. The app polls the snapshot every 30 seconds;
+  it cannot create a new Codex snapshot when the hook has not run.
 - `cat "$HOME/Library/Application Support/ai-usage-meter/snapshot.json"`
   shows available provider windows with ISO-8601 dates.
 - Both menu-bar items use the same color rules: numbers become bold at 75

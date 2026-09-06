@@ -71,3 +71,11 @@
 - source: S5: docs/2026-09-06_codex-pro-weekly-limit.md
 - pages touched: decisions/2026-09-06_codex-pro-weekly-only.md, decisions/2026-09-06_codex-app-server-snapshot.md, entities/runbooks/install_and_wire.md, sources/source_registry.md, index.md
 - notes: Codex Pro now decodes and renders only its 7-day limit; Claude retains its 5-hour and 7-day windows
+
+## [2026-09-06] lint
+- contradictions: none (S4's initial 300/10080-minute interpretation is explicitly superseded by S5 for Codex Pro)
+- stale claims: none
+- orphan pages: none
+- missing cross-refs: none
+- now-block: fresh (visual styling is approved; async-hook freshness remains active until the Stop hook is wired)
+- claude-md: compliant (44-line static AGENTS.md; CLAUDE.md delegates to it)

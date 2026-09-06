@@ -18,6 +18,7 @@ APP_DEST   = $(HOME)/Applications/$(APP_NAME).app
 HOOK_DEST  = $(HOME)/.local/bin/ai-usage-meter-hook
 CODEX_HOOK_DEST = $(HOME)/.local/bin/ai-usage-meter-codex-hook
 SNAPSHOT   = $(HOME)/Library/Application Support/ai-usage-meter
+export CODEX_HOOK_DEST
 
 .PHONY: build test bundle install uninstall run clean snippet
 
@@ -26,6 +27,7 @@ build:
 
 test:
 	swift test $(TEST_FLAGS) $(if $(FILTER),--filter $(FILTER),)
+	sh Tests/SnippetTests.sh
 
 bundle: build
 	rm -rf "$(APP)"
@@ -66,13 +68,20 @@ snippet:
 		echo "Codex CLI not found on PATH; rerun 'make snippet' from a shell where codex is available."; \
 		exit 0; \
 	fi; \
-	codex_bin="$$(realpath "$$codex_bin")"; \
-	hook_dest="$$HOME/.local/bin/ai-usage-meter-codex-hook"; \
+	case "$$codex_bin" in /*) ;; *) \
+		echo "Codex CLI path must be absolute; found: $$codex_bin"; \
+		exit 1;; \
+	esac; \
+	hook_dest="$$CODEX_HOOK_DEST"; \
 	for path in "$$hook_dest" "$$codex_bin"; do \
 		case "$$path" in *\'*|*\"*|*\\*) \
 			echo "Cannot render Codex hook JSON: executable paths cannot contain quotes or backslashes."; \
 			exit 1;; \
 		esac; \
+		if printf '%s' "$$path" | LC_ALL=C grep -Fq '`'; then \
+			echo "Cannot render Codex hook JSON: executable paths cannot contain backticks."; \
+			exit 1; \
+		fi; \
 		if printf '%s' "$$path" | LC_ALL=C grep -q '[[:cntrl:]]'; then \
 			echo "Cannot render Codex hook JSON: executable paths cannot contain control characters."; \
 			exit 1; \
