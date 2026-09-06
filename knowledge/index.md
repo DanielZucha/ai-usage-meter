@@ -5,7 +5,7 @@
 ## Now
 - Phase: app-owned Codex polling installed, live values verified, renewed six-role audit complete; PR 4 open (as of 2026-09-06)
 - Active: user monitoring of automatic refresh after both freshness fixes (as of 2026-09-06)
-- Next: commit/push the verified revision and update PR 4; merge remains on hold for monitoring feedback (as of 2026-09-06)
+- Next: collect monitoring feedback on the pushed revision in PR 4; merge remains on hold (as of 2026-09-06)
 - Deferred: threshold notifications (as of 2026-09-06)
 - Known: per-model weekly usage (the /usage Fable row) is not in the statusline payload; the builder emits five_hour, seven_day, spend_limit only, and the Fable row comes from the usage API the meter never calls (probe 2, S3) (as of 2026-09-05)
 
