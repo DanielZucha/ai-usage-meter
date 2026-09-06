@@ -21,7 +21,7 @@ struct MeterApp: App {
         .menuBarExtraStyle(.window)
 
         MenuBarExtra {
-            MeterMenu(display: model.codexDisplay)
+            MeterMenu(display: model.codexDisplay, refreshUnavailable: model.codexRefreshUnavailable)
         } label: {
             MeterLabel(
                 image: model.codexLabelImage,

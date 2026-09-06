@@ -1,47 +1,41 @@
 #!/bin/sh
 set -eu
-
 test_root=$(mktemp -d "${TMPDIR:-/tmp}/ai-usage-meter-snippet.XXXXXX")
 trap 'rm -rf "$test_root"' EXIT
-
-mkdir -p "$test_root/bin" "$test_root/releases/current/bin"
+mkdir -p "$test_root/bin" "$test_root/releases/current/bin" "$test_root/state"
 codex_target="$test_root/releases/current/bin/codex"
 codex_launcher="$test_root/bin/codex"
-custom_hook="$test_root/custom-bin/ai-usage-meter-codex-hook"
-
 touch "$codex_target"
 chmod 755 "$codex_target"
 ln -s "$codex_target" "$codex_launcher"
-
-output=$(
-    PATH="$test_root/bin:/usr/bin:/bin" \
-    make --no-print-directory snippet CODEX_HOOK_DEST="$custom_hook"
-)
-
-printf '%s\n' "$output" | grep -Fq -- "--codex-bin '$codex_launcher'"
-printf '%s\n' "$output" | grep -Fq -- "'$custom_hook' --codex-bin"
-
-if printf '%s\n' "$output" | grep -Fq "$codex_target"; then
-    printf 'snippet pinned the versioned Codex target instead of its stable launcher\n' >&2
+legacy_hook="$test_root/ai-usage-meter-codex-hook"
+touch "$legacy_hook"
+PATH="$test_root/bin:/usr/bin:/bin" SNAPSHOT="$test_root/state" CODEX_HOOK_DEST="$legacy_hook" \
+    sh packaging/install-codex-launcher.sh
+[ "$(cat "$test_root/state/codex-launcher")" = "$codex_launcher" ]
+[ "$(stat -f '%Lp' "$test_root/state/codex-launcher")" = 600 ]
+[ ! -e "$legacy_hook" ]
+output=$(make --no-print-directory snippet)
+printf '%s\n' "$output" | grep -Fq 'model-with-reasoning'
+if printf '%s\n' "$output" | grep -Eq 'Stop|hooks.json|codex-hook'; then
+    printf 'snippet still requires a Codex hook\n' >&2
     exit 1
 fi
+marker="$test_root/injection-ran"
+literal_state="$test_root/\`touch $marker\`"
+PATH="$test_root/bin:/usr/bin:/bin" SNAPSHOT="$literal_state" CODEX_HOOK_DEST="$legacy_hook" \
+    sh packaging/install-codex-launcher.sh
+[ -f "$literal_state/codex-launcher" ]
+[ ! -e "$marker" ]
+PATH="/usr/bin:/bin" SNAPSHOT="$test_root/state" CODEX_HOOK_DEST="$legacy_hook" \
+    sh packaging/install-codex-launcher.sh
+[ ! -e "$test_root/state/codex-launcher" ]
 
-injection_marker="$test_root/injection-ran"
-unsafe_hook="$test_root/\`touch $injection_marker\`/hook"
-if PATH="$test_root/bin:/usr/bin:/bin" \
-    make --no-print-directory snippet CODEX_HOOK_DEST="$unsafe_hook" >/dev/null 2>&1; then
-    printf 'snippet accepted a hook destination with shell metacharacters\n' >&2
-    exit 1
-fi
-
-if [ -e "$injection_marker" ]; then
-    printf 'snippet evaluated the hook destination before validating it\n' >&2
-    exit 1
-fi
-
-quoted_hook="$test_root/quoted\"path/hook"
-if PATH="$test_root/bin:/usr/bin:/bin" \
-    make --no-print-directory snippet CODEX_HOOK_DEST="$quoted_hook" >/dev/null 2>&1; then
-    printf 'snippet accepted a hook destination containing a quote\n' >&2
+# A symlinked configuration destination must never redirect the atomic rename.
+mkdir -p "$test_root/victim"
+ln -s "$test_root/victim" "$test_root/state/codex-launcher"
+if PATH="$test_root/bin:/usr/bin:/bin" SNAPSHOT="$test_root/state" CODEX_HOOK_DEST="$legacy_hook" \
+    sh packaging/install-codex-launcher.sh >/dev/null 2>&1; then
+    printf 'installer accepted symlinked configuration destination\n' >&2
     exit 1
 fi

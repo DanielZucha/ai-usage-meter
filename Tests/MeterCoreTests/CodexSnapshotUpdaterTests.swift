@@ -2,7 +2,7 @@ import Foundation
 import Testing
 @testable import MeterCore
 
-@Suite struct CodexHookRunnerTests {
+@Suite struct CodexSnapshotUpdaterTests {
     let executableURL = URL(fileURLWithPath: "/usr/local/bin/codex")
     let now = Date(timeIntervalSince1970: 1_788_608_892)
 
@@ -40,7 +40,8 @@ import Testing
     }
 
     @Test func successfulFetchPreservesClaudeAndReplacesOnlyCodex() throws {
-        let store = try seededStore()
+       let store = try seededStore()
+        defer { try? FileManager.default.removeItem(at: store.fileURL.deletingLastPathComponent()) }
         let incoming = ProviderUsage(
             fiveHour: nil,
             sevenDay: UsageWindow(
@@ -52,7 +53,7 @@ import Testing
         )
         let fetcher = FakeCodexUsageFetcher(response: .usage(incoming))
 
-        CodexHookRunner.run(executableURL: executableURL, store: store, now: now, fetcher: fetcher)
+        _ = CodexSnapshotUpdater.run(executableURL: executableURL, store: store, now: { now }, fetcher: fetcher)
 
         let snapshot = try #require(store.read())
         #expect(snapshot.providers.count == 2)
@@ -60,28 +61,56 @@ import Testing
         #expect(snapshot.providers[Snapshot.codexProviderID] == incoming)
     }
 
-    @Test func nilFetchLeavesSnapshotBytesUnchanged() throws {
+    @Test func authoritativeFetchCorrectsEarlierResetAndLowerUsage() throws {
         let store = try seededStore()
+        defer { try? FileManager.default.removeItem(at: store.fileURL.deletingLastPathComponent()) }
+        var initial = oldCodexUsage()
+        initial.sevenDay = UsageWindow(usedPercentage: 12, resetsAt: Fixtures.sevenReset.addingTimeInterval(1))
+        try store.withExclusiveLock {
+            var snapshot = try #require(store.read())
+            snapshot.providers[Snapshot.codexProviderID] = initial
+            try store.write(snapshot)
+        }
+        var incoming = ProviderUsage(fiveHour: nil,
+            sevenDay: UsageWindow(usedPercentage: 23, resetsAt: Fixtures.sevenReset),
+            capturedAt: now, source: "codex-app-server")
+        let first = FakeCodexUsageFetcher(response: .usage(incoming))
+        #expect(CodexSnapshotUpdater.run(executableURL: executableURL, store: store,
+                                        now: { now }, fetcher: first) == .updated)
+        #expect(store.read()?.providers[Snapshot.codexProviderID] == incoming)
+        incoming.sevenDay?.usedPercentage = 18
+        let correction = FakeCodexUsageFetcher(response: .usage(incoming))
+        #expect(CodexSnapshotUpdater.run(executableURL: executableURL, store: store,
+                                        now: { now }, fetcher: correction) == .updated)
+        #expect(store.read()?.providers[Snapshot.codexProviderID] == incoming)
+        #expect(store.read()?.providers[Snapshot.claudeProviderID] == claudeUsage())
+    }
+
+    @Test func nilFetchLeavesSnapshotBytesUnchanged() throws {
+       let store = try seededStore()
+        defer { try? FileManager.default.removeItem(at: store.fileURL.deletingLastPathComponent()) }
         let before = try Data(contentsOf: store.fileURL)
         let fetcher = FakeCodexUsageFetcher(response: .usage(nil))
 
-        CodexHookRunner.run(executableURL: executableURL, store: store, now: now, fetcher: fetcher)
+        _ = CodexSnapshotUpdater.run(executableURL: executableURL, store: store, now: { now }, fetcher: fetcher)
 
         #expect(try Data(contentsOf: store.fileURL) == before)
     }
 
     @Test func throwingFetchLeavesSnapshotBytesUnchanged() throws {
-        let store = try seededStore()
+       let store = try seededStore()
+        defer { try? FileManager.default.removeItem(at: store.fileURL.deletingLastPathComponent()) }
         let before = try Data(contentsOf: store.fileURL)
         let fetcher = FakeCodexUsageFetcher(response: .failure)
 
-        CodexHookRunner.run(executableURL: executableURL, store: store, now: now, fetcher: fetcher)
+        _ = CodexSnapshotUpdater.run(executableURL: executableURL, store: store, now: { now }, fetcher: fetcher)
 
         #expect(try Data(contentsOf: store.fileURL) == before)
     }
 
     @Test func fiveHourOnlyFetchLeavesSnapshotBytesUnchanged() throws {
-        let store = try seededStore()
+       let store = try seededStore()
+        defer { try? FileManager.default.removeItem(at: store.fileURL.deletingLastPathComponent()) }
         let before = try Data(contentsOf: store.fileURL)
         let incomingFiveHour = UsageWindow(
             usedPercentage: 31,
@@ -95,13 +124,14 @@ import Testing
         )
         let fetcher = FakeCodexUsageFetcher(response: .usage(incoming))
 
-        CodexHookRunner.run(executableURL: executableURL, store: store, now: now, fetcher: fetcher)
+        _ = CodexSnapshotUpdater.run(executableURL: executableURL, store: store, now: { now }, fetcher: fetcher)
 
         #expect(try Data(contentsOf: store.fileURL) == before)
     }
 
     @Test func lockTimeoutLeavesSnapshotUnchangedAfterFetching() throws {
-        let store = try seededStore()
+       let store = try seededStore()
+        defer { try? FileManager.default.removeItem(at: store.fileURL.deletingLastPathComponent()) }
         let before = try Data(contentsOf: store.fileURL)
         let lockPath = store.fileURL.deletingLastPathComponent()
             .appendingPathComponent(SnapshotStore.lockFileName).path
@@ -114,7 +144,7 @@ import Testing
         }
         let fetcher = FakeCodexUsageFetcher(response: .usage(oldCodexUsage()))
 
-        CodexHookRunner.run(executableURL: executableURL, store: store, now: now, fetcher: fetcher)
+        _ = CodexSnapshotUpdater.run(executableURL: executableURL, store: store, now: { now }, fetcher: fetcher)
 
         // Fetch outside the file lock: the App Server exchange can take
         // seconds and must not block Claude's independent snapshot writer.

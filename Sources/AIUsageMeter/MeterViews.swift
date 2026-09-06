@@ -21,6 +21,7 @@ struct MeterMenu: View {
     static let width: CGFloat = 260
 
     let display: MeterDisplay
+    var refreshUnavailable = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -30,6 +31,10 @@ struct MeterMenu: View {
             Divider()
             Text(display.ageText)
                 .foregroundStyle(.secondary)
+            if refreshUnavailable {
+                Text("Refresh unavailable")
+                    .foregroundStyle(.secondary)
+            }
             Divider()
             Button("Quit AI Usage Meter") {
                 NSApplication.shared.terminate(nil)
