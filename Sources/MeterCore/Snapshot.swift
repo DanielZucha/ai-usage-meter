@@ -42,7 +42,6 @@ public struct ProviderUsage: Codable, Equatable, Sendable {
 public struct Snapshot: Codable, Equatable, Sendable {
     public static let currentSchemaVersion = 1
     public static let claudeProviderID = "claude"
-    public static let codexProviderID = "codex"
 
     public var schemaVersion: Int
     public var providers: [String: ProviderUsage]
@@ -52,7 +51,8 @@ public struct Snapshot: Codable, Equatable, Sendable {
         self.providers = providers
     }
 
-    /// Claude convenience accessor retained alongside the provider-keyed map.
+    /// Single-provider convenience for version one. When a second provider
+    /// lands, the display layer iterates `providers`; storage does not change.
     public var claude: ProviderUsage? {
         get { providers[Self.claudeProviderID] }
         set { providers[Self.claudeProviderID] = newValue }

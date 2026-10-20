@@ -3,9 +3,9 @@
 <!-- Generated 2026-09-05 during the founding grill session -->
 
 ## Now
-- Phase: app-owned Codex polling installed, live values verified, renewed six-role audit complete; PR 4 open (as of 2026-09-06)
-- Active: user monitoring of automatic refresh after both freshness fixes (as of 2026-09-06)
-- Next: collect monitoring feedback on the pushed revision in PR 4; merge remains on hold (as of 2026-09-06)
+- Phase: Codex meter dropped (subscription ended); app is Claude-only again, installed (as of 2026-10-20)
+- Active: PR for branch drop-codex-meter into devel (as of 2026-10-20)
+- Next: merge, then promote devel to main when ready (as of 2026-10-20)
 - Deferred: threshold notifications (as of 2026-09-06)
 - Known: per-model weekly usage (the /usage Fable row) is not in the statusline payload; the builder emits five_hour, seven_day, spend_limit only, and the Fable row comes from the usage API the meter never calls (probe 2, S3) (as of 2026-09-05)
 
@@ -38,6 +38,7 @@
 - [2026-09-06_codex-app-owned-polling.md](decisions/2026-09-06_codex-app-owned-polling.md) -- verified launch/30-second collection, authoritative Codex replacement, successful-capture age, and hook retirement
 - [2026-09-06_codex-pro-weekly-only.md](decisions/2026-09-06_codex-pro-weekly-only.md) -- Codex Pro decodes and renders only its 7-day window; Claude remains unchanged
 - [2026-09-06_pr-4_audit.md](decisions/2026-09-06_pr-4_audit.md) -- historical audit of Stop-hook implementation; stale for app-owned polling revision
+- [2026-10-20_drop-codex-meter.md](decisions/2026-10-20_drop-codex-meter.md) -- Codex meter removed after the OpenAI subscription ended; code back to v0.1.0, Claude-only
 - [2026-09-06_pr-4_polling_audit.md](decisions/2026-09-06_pr-4_polling_audit.md) -- renewed six-role audit, 108 tests, coverage limits, installed polling/value checks, and remaining low findings
 
-**Last updated**: 2026-09-06
+**Last updated**: 2026-10-20

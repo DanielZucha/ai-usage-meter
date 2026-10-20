@@ -5,13 +5,9 @@ import MeterCore
 /// What sits in the menu bar: the pre-rendered label image.
 struct MeterLabel: View {
     let image: NSImage
-    let accessibilityLabel: String
-    let accessibilityValue: String
 
     var body: some View {
         Image(nsImage: image)
-            .accessibilityLabel(Text(accessibilityLabel))
-            .accessibilityValue(Text(accessibilityValue))
     }
 }
 
@@ -21,20 +17,14 @@ struct MeterMenu: View {
     static let width: CGFloat = 260
 
     let display: MeterDisplay
-    var refreshUnavailable = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            ForEach(display.visibleWindows.indices, id: \.self) { index in
-                WindowRow(window: display.visibleWindows[index])
-            }
+            WindowRow(window: display.fiveHour)
+            WindowRow(window: display.sevenDay)
             Divider()
             Text(display.ageText)
                 .foregroundStyle(.secondary)
-            if refreshUnavailable {
-                Text("Refresh unavailable")
-                    .foregroundStyle(.secondary)
-            }
             Divider()
             Button("Quit AI Usage Meter") {
                 NSApplication.shared.terminate(nil)

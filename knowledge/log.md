@@ -114,3 +114,8 @@
 - missing cross-refs: none; relative wiki links resolved and custom evidence tags declared
 - now-block: fresh; installed/verified revision awaits PR update and user monitoring
 - claude-md: compliant; 47-line durable AGENTS.md and CLAUDE.md delegation
+
+## [2026-10-20] decision | Codex meter dropped
+- source: user request; decisions/2026-10-20_drop-codex-meter.md
+- pages touched: decisions/2026-10-20_drop-codex-meter.md, index.md, WIKI_SCHEMA.md, synthesis/gaps_and_leads.md, entities/runbooks/install_and_wire.md (restored to v0.1.0)
+- notes: OpenAI subscription ended; code restored to v0.1.0 Claude-only state; 72 tests pass; app reinstalled; Codex launcher config removed

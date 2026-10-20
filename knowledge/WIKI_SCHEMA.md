@@ -48,6 +48,8 @@
 
 - `[ADR:codex-polling]` identifies the approved contract and session diagnosis
   recorded in [the app-owned polling decision](decisions/2026-09-06_codex-app-owned-polling.md).
+- `[ADR:drop-codex]` identifies Daniel's request and the restore checks in
+  [the drop decision](decisions/2026-10-20_drop-codex-meter.md).
 - `[S#:C#]` identifies a numbered claim in
   [the source registry](sources/source_registry.md); `[S#]` identifies its
   source, and `[S#:F#]` a numbered finding in that source.
@@ -64,4 +66,4 @@
 
 Related: [knowledge index](index.md)
 
-**Last updated**: 2026-09-06
+**Last updated**: 2026-10-20

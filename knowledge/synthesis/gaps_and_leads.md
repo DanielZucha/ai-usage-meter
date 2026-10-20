@@ -1,10 +1,6 @@
 # Gaps and leads
 
 ## Open
-- Codex user monitoring remains active before merge; automated refresh and
-  matching account values are verified in the
-  [renewed polling audit](../decisions/2026-09-06_pr-4_polling_audit.md).
-  [PRAudit:2]
 - `schema_version` is written but never inspected on read, and there is no
   migration hook; becomes a P3 debt issue at the first `currentSchemaVersion`
   bump.
@@ -16,6 +12,8 @@
 - 2026-09-06: Codex as a second provider. The authenticated Codex App Server
   remains the usage source; Stop-hook scheduling is superseded. See the
   [Codex source decision](../decisions/2026-09-06_codex-app-server-snapshot.md).
+- 2026-10-20: Codex meter removed after the subscription ended; see
+  [the drop decision](../decisions/2026-10-20_drop-codex-meter.md).
 
 ## Leads
 - Notifications at thresholds were deferred, not rejected. Trigger: a
