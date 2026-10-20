@@ -3,14 +3,16 @@
 <!-- Generated 2026-09-05 during the founding grill session -->
 
 ## Now
-- Phase: v1 audited on feature/v1-meter (six approvals, 72 tests); PR to devel next (as of 2026-09-05)
-- Active: watch whether the 30 s cadence and the 75/90 rules feel right; hook wired into settings.json on 2026-09-05 and reporting live (as of 2026-09-05)
-- Next: PR to devel, merge, then tag v0.1.0 on main after Daniel confirms the version (as of 2026-09-05)
-- Deferred: threshold notifications; Codex as a second provider (see synthesis/gaps_and_leads.md) (as of 2026-09-05)
+- Phase: Codex meter dropped (subscription ended); app is Claude-only again, installed (as of 2026-10-20)
+- Active: PR drop-codex-meter into main; devel is retired, main is the integration branch (as of 2026-10-20)
+- Next: merge the PR; delete devel after merge (as of 2026-10-20)
+- Deferred: threshold notifications (as of 2026-09-06)
 - Known: per-model weekly usage (the /usage Fable row) is not in the statusline payload; the builder emits five_hour, seven_day, spend_limit only, and the Fable row comes from the usage API the meter never calls (probe 2, S3) (as of 2026-09-05)
 
 ## Sources
 - [source_registry.md](sources/source_registry.md) -- registry of immutable inputs
+- [2026-09-06_codex-data-source.md](../docs/2026-09-06_codex-data-source.md) -- verified Codex App Server, hook, signage, and glyph findings
+- [2026-09-06_codex-pro-weekly-limit.md](../docs/2026-09-06_codex-pro-weekly-limit.md) -- live Pro refresh and approved weekly-only correction
 
 ## Entities
 
@@ -32,5 +34,11 @@
 - [2026-09-05_snapshot-merge-rule.md](decisions/2026-09-05_snapshot-merge-rule.md) -- every session writes; same window keeps the max, later reset replaces, epoch converted to ISO
 - [2026-09-05_glyph-embedded-svg-string.md](decisions/2026-09-05_glyph-embedded-svg-string.md) -- glyph travels as a Swift string constant, byte-identical to assets/claude.svg; no resource bundle
 - [2026-09-05_pr-1_audit.md](decisions/2026-09-05_pr-1_audit.md) -- v1 merges as audited; hollow rate_limits no longer refreshes captured_at; low notes recorded, not ticketed
+- [2026-09-06_codex-app-server-snapshot.md](decisions/2026-09-06_codex-app-server-snapshot.md) -- retained authenticated App Server source; historical Stop-hook scheduling superseded (superseded 2026-10-20)
+- [2026-09-06_codex-app-owned-polling.md](decisions/2026-09-06_codex-app-owned-polling.md) -- verified launch/30-second collection, authoritative Codex replacement, successful-capture age, and hook retirement (superseded 2026-10-20)
+- [2026-09-06_codex-pro-weekly-only.md](decisions/2026-09-06_codex-pro-weekly-only.md) -- Codex Pro decodes and renders only its 7-day window; Claude remains unchanged (superseded 2026-10-20)
+- [2026-09-06_pr-4_audit.md](decisions/2026-09-06_pr-4_audit.md) -- historical audit of Stop-hook implementation; stale for app-owned polling revision (superseded 2026-10-20)
+- [2026-10-20_drop-codex-meter.md](decisions/2026-10-20_drop-codex-meter.md) -- Codex meter removed after the OpenAI subscription ended; code back to v0.1.0, Claude-only
+- [2026-09-06_pr-4_polling_audit.md](decisions/2026-09-06_pr-4_polling_audit.md) -- renewed six-role audit, 108 tests, coverage limits, installed polling/value checks, and remaining low findings (superseded 2026-10-20)
 
-**Last updated**: 2026-09-05
+**Last updated**: 2026-10-20
