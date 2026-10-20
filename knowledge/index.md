@@ -4,8 +4,8 @@
 
 ## Now
 - Phase: Codex meter dropped (subscription ended); app is Claude-only again, installed (as of 2026-10-20)
-- Active: PR for branch drop-codex-meter into devel (as of 2026-10-20)
-- Next: merge, then promote devel to main when ready (as of 2026-10-20)
+- Active: PR drop-codex-meter into main; devel is retired, main is the integration branch (as of 2026-10-20)
+- Next: merge the PR; delete devel after merge (as of 2026-10-20)
 - Deferred: threshold notifications (as of 2026-09-06)
 - Known: per-model weekly usage (the /usage Fable row) is not in the statusline payload; the builder emits five_hour, seven_day, spend_limit only, and the Fable row comes from the usage API the meter never calls (probe 2, S3) (as of 2026-09-05)
 
