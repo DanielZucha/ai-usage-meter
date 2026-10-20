@@ -1,9 +1,5 @@
 # Decision: the snapshot file is the only interface between hook and app
 
-This remains the Claude hook/app interface. Codex collection is now owned by
-the app under the [polling decision](2026-09-06_codex-app-owned-polling.md),
-while retaining the provider-keyed snapshot storage contract. [ADR:codex-polling]
-
 ## What was decided
 The hook writes `~/Library/Application Support/ai-usage-meter/snapshot.json`
 by writing a temp file in the same directory and renaming it into place.
@@ -40,4 +36,4 @@ owns.
 Related: [data-source decision](2026-09-05_data-source-statusline-snapshot.md),
 [app behaviour](2026-09-05_app-refresh-and-display-rules.md)
 
-**Last updated**: 2026-09-06
+**Last updated**: 2026-09-05

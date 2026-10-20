@@ -1,5 +1,7 @@
 # Decision: Codex usage comes from its authenticated App Server process
 
+> Superseded 2026-10-20: the Codex meter was removed; see [the drop decision](2026-10-20_drop-codex-meter.md).
+
 **Status**: App Server source retained; the Stop-hook scheduling and freshness
 policy below is SUPERSEDED by
 [app-owned polling](2026-09-06_codex-app-owned-polling.md). The original decision

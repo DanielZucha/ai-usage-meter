@@ -1,5 +1,7 @@
 # Decision: the app owns Codex usage polling
 
+> Superseded 2026-10-20: the Codex meter was removed; see [the drop decision](2026-10-20_drop-codex-meter.md).
+
 **Status**: IMPLEMENTED; live captures and renewed audit verified; user monitoring
 continues before merge. [PRAudit:2]
 **Owner**: Daniel

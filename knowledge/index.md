@@ -31,14 +31,14 @@
 - [2026-09-05_snapshot-contract.md](decisions/2026-09-05_snapshot-contract.md) -- provider-keyed snapshot in Application Support, atomic rename, absence preserved
 - [2026-09-05_hook-is-a-swift-target.md](decisions/2026-09-05_hook-is-a-swift-target.md) -- hook is a compiled target sharing the model; prints one terminal line; installer never edits settings.json
 - [2026-09-05_app-refresh-and-display-rules.md](decisions/2026-09-05_app-refresh-and-display-rules.md) -- 30 s timer, filled glyph plus two numbers, bold at 75, label flips at 90, zero after reset, window-style dropdown with pill bars
-- [2026-09-05_snapshot-merge-rule.md](decisions/2026-09-05_snapshot-merge-rule.md) -- Claude session merge keeps the max for the same window; serialized Codex reads use provider replacement
+- [2026-09-05_snapshot-merge-rule.md](decisions/2026-09-05_snapshot-merge-rule.md) -- every session writes; same window keeps the max, later reset replaces, epoch converted to ISO
 - [2026-09-05_glyph-embedded-svg-string.md](decisions/2026-09-05_glyph-embedded-svg-string.md) -- glyph travels as a Swift string constant, byte-identical to assets/claude.svg; no resource bundle
 - [2026-09-05_pr-1_audit.md](decisions/2026-09-05_pr-1_audit.md) -- v1 merges as audited; hollow rate_limits no longer refreshes captured_at; low notes recorded, not ticketed
-- [2026-09-06_codex-app-server-snapshot.md](decisions/2026-09-06_codex-app-server-snapshot.md) -- retained authenticated App Server source; historical Stop-hook scheduling superseded
-- [2026-09-06_codex-app-owned-polling.md](decisions/2026-09-06_codex-app-owned-polling.md) -- verified launch/30-second collection, authoritative Codex replacement, successful-capture age, and hook retirement
-- [2026-09-06_codex-pro-weekly-only.md](decisions/2026-09-06_codex-pro-weekly-only.md) -- Codex Pro decodes and renders only its 7-day window; Claude remains unchanged
-- [2026-09-06_pr-4_audit.md](decisions/2026-09-06_pr-4_audit.md) -- historical audit of Stop-hook implementation; stale for app-owned polling revision
+- [2026-09-06_codex-app-server-snapshot.md](decisions/2026-09-06_codex-app-server-snapshot.md) -- retained authenticated App Server source; historical Stop-hook scheduling superseded (superseded 2026-10-20)
+- [2026-09-06_codex-app-owned-polling.md](decisions/2026-09-06_codex-app-owned-polling.md) -- verified launch/30-second collection, authoritative Codex replacement, successful-capture age, and hook retirement (superseded 2026-10-20)
+- [2026-09-06_codex-pro-weekly-only.md](decisions/2026-09-06_codex-pro-weekly-only.md) -- Codex Pro decodes and renders only its 7-day window; Claude remains unchanged (superseded 2026-10-20)
+- [2026-09-06_pr-4_audit.md](decisions/2026-09-06_pr-4_audit.md) -- historical audit of Stop-hook implementation; stale for app-owned polling revision (superseded 2026-10-20)
 - [2026-10-20_drop-codex-meter.md](decisions/2026-10-20_drop-codex-meter.md) -- Codex meter removed after the OpenAI subscription ended; code back to v0.1.0, Claude-only
-- [2026-09-06_pr-4_polling_audit.md](decisions/2026-09-06_pr-4_polling_audit.md) -- renewed six-role audit, 108 tests, coverage limits, installed polling/value checks, and remaining low findings
+- [2026-09-06_pr-4_polling_audit.md](decisions/2026-09-06_pr-4_polling_audit.md) -- renewed six-role audit, 108 tests, coverage limits, installed polling/value checks, and remaining low findings (superseded 2026-10-20)
 
 **Last updated**: 2026-10-20

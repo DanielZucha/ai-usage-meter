@@ -119,3 +119,11 @@
 - source: user request; decisions/2026-10-20_drop-codex-meter.md
 - pages touched: decisions/2026-10-20_drop-codex-meter.md, index.md, WIKI_SCHEMA.md, synthesis/gaps_and_leads.md, entities/runbooks/install_and_wire.md (restored to v0.1.0)
 - notes: OpenAI subscription ended; code restored to v0.1.0 Claude-only state; 72 tests pass; app reinstalled; Codex launcher config removed
+
+## [2026-10-20] lint
+- contradictions: none after fix; three v1 decision pages (snapshot-merge-rule, snapshot-contract, app-refresh-and-display-rules) and the merge-rule index line described Codex as live, restored to v0.1.0 text
+- stale claims: Codex decision and PR 4 audit pages marked superseded 2026-10-20
+- orphan pages: none
+- missing cross-refs: none; all relative links resolve
+- now-block: fresh
+- agents-md: compliant after restructure into Phase, Product, Stack, Rules, Resources; CLAUDE.md delegates by link, not `@AGENTS.md` (pre-existing, left)

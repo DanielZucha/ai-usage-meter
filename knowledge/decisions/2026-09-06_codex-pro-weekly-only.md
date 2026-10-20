@@ -1,5 +1,7 @@
 # Decision: Codex Pro displays only the weekly limit
 
+> Superseded 2026-10-20: the Codex meter was removed; see [the drop decision](2026-10-20_drop-codex-meter.md).
+
 ## What was decided
 
 Codex decodes and displays only its 10080-minute 7-day subscription window.
