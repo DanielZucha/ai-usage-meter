@@ -2,7 +2,9 @@
 
 ## Phase
 
-Personal tool in daily use; small, stable, maintained by Daniel.
+Retired 2026-11-25 and uninstalled: the desktop app's Code tab does not run
+the statusline, so the meter cannot see in-app usage. See
+[retire-meter](knowledge/decisions/2026-11-25_retire-meter.md).
 
 ## Product
 

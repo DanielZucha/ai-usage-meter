@@ -3,10 +3,9 @@
 <!-- Generated 2026-09-05 during the founding grill session -->
 
 ## Now
-- Phase: Codex meter dropped (subscription ended); app is Claude-only again, installed (as of 2026-10-20)
-- Active: PR drop-codex-meter into main; devel is retired, main is the integration branch (as of 2026-10-20)
-- Next: merge the PR; delete devel after merge (as of 2026-10-20)
-- Deferred: threshold notifications (as of 2026-09-06)
+- Phase: retired and uninstalled; the desktop app's Code tab does not run the statusline, so in-app usage is invisible (as of 2026-11-25)
+- Active: PR retire-meter into main (as of 2026-11-25)
+- Next: merge the PR, then archive the GitHub repo (as of 2026-11-25)
 - Known: per-model weekly usage (the /usage Fable row) is not in the statusline payload; the builder emits five_hour, seven_day, spend_limit only, and the Fable row comes from the usage API the meter never calls (probe 2, S3) (as of 2026-09-05)
 
 ## Sources
@@ -40,5 +39,6 @@
 - [2026-09-06_pr-4_audit.md](decisions/2026-09-06_pr-4_audit.md) -- historical audit of Stop-hook implementation; stale for app-owned polling revision (superseded 2026-10-20)
 - [2026-10-20_drop-codex-meter.md](decisions/2026-10-20_drop-codex-meter.md) -- Codex meter removed after the OpenAI subscription ended; code back to v0.1.0, Claude-only
 - [2026-09-06_pr-4_polling_audit.md](decisions/2026-09-06_pr-4_polling_audit.md) -- renewed six-role audit, 108 tests, coverage limits, installed polling/value checks, and remaining low findings (superseded 2026-10-20)
+- [2026-11-25_retire-meter.md](decisions/2026-11-25_retire-meter.md) -- meter retired; the desktop app's Code tab does not run the statusline; credential boundary kept
 
-**Last updated**: 2026-10-20
+**Last updated**: 2026-11-25

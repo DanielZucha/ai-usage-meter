@@ -127,3 +127,8 @@
 - missing cross-refs: none; all relative links resolve
 - now-block: fresh
 - agents-md: compliant after restructure into Phase, Product, Stack, Rules, Resources; CLAUDE.md delegates by link, not `@AGENTS.md` (pre-existing, left)
+
+## [2026-11-25] decision | meter retired
+- source: user request; decisions/2026-11-25_retire-meter.md
+- pages touched: decisions/2026-11-25_retire-meter.md, index.md, AGENTS.md
+- notes: make uninstall run; snapshot moved to Trash; hook argument removed from the statusline command; plan_status.py kept
