@@ -132,3 +132,11 @@
 - source: user request; decisions/2026-11-25_retire-meter.md
 - pages touched: decisions/2026-11-25_retire-meter.md, index.md, AGENTS.md
 - notes: make uninstall run; snapshot moved to Trash; hook argument removed from the statusline command; plan_status.py kept
+
+## [2026-11-25] lint
+- contradictions: none
+- stale claims: none; runbooks/install_and_wire.md still describes an install, kept as the reversal path
+- orphan pages: none; decisions/2026-11-25_retire-meter.md linked from index.md and AGENTS.md
+- missing cross-refs: none; all relative links resolve
+- now-block: fresh
+- agents-md: compliant; CLAUDE.md delegates by link, not `@AGENTS.md` (pre-existing, left)
